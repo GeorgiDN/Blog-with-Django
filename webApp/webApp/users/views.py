@@ -1,7 +1,8 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect
 from django.contrib.auth import login
 from django.contrib import messages
-from django.views.generic import CreateView
+from django.views.generic import CreateView, View
 from django.contrib.auth.models import User
 from django.urls import reverse_lazy
 
@@ -23,28 +24,34 @@ class AppUserRegisterView(CreateView):
         return response
 
 
-@login_required
-def profile(request):
-    if request.method == 'POST':
+class ProfileView(LoginRequiredMixin, View):
+    def get(self, request, *args, **kwargs):
+        u_form = UserUpdateForm(instance=request.user)
+        p_form = ProfileUpdateForm(instance=request.user.user_profile)
+
+        context = {
+            'u_form': u_form,
+            'p_form': p_form
+        }
+
+        return render(request, 'users/profile.html', context)
+
+    def post(self, request, *args, **kwargs):
         u_form = UserUpdateForm(request.POST, instance=request.user)
         p_form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user.user_profile)
 
         if u_form.is_valid() and p_form.is_valid():
             u_form.save()
             p_form.save()
-            messages.success(request, f'Your account has been updated!')
+            messages.success(self.request, 'Your profile has been updated!')
             return redirect('profile')
 
-    else:
-        u_form = UserUpdateForm(instance=request.user)
-        p_form = ProfileUpdateForm(instance=request.user.user_profile)
+        context = {
+            'u_form': u_form,
+            'p_form': p_form
+        }
 
-    context = {
-        'u_form': u_form,
-        'p_form': p_form
-    }
-
-    return render(request, 'users/profile.html', context)
+        return render(request, 'users/profile.html', context)
 
 
 # FBV
@@ -64,3 +71,28 @@ def profile(request):
 #     }
 #
 #     return render(request, 'users/register.html', context)
+
+
+
+# @login_required
+# def profile(request):
+#     if request.method == 'POST':
+#         u_form = UserUpdateForm(request.POST, instance=request.user)
+#         p_form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user.user_profile)
+#
+#         if u_form.is_valid() and p_form.is_valid():
+#             u_form.save()
+#             p_form.save()
+#             messages.success(request, f'Your account has been updated!')
+#             return redirect('profile')
+#
+#     else:
+#         u_form = UserUpdateForm(instance=request.user)
+#         p_form = ProfileUpdateForm(instance=request.user.user_profile)
+#
+#     context = {
+#         'u_form': u_form,
+#         'p_form': p_form
+#     }
+#
+#     return render(request, 'users/profile.html', context)
