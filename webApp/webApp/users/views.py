@@ -1,13 +1,15 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import render, redirect
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login
 from django.contrib import messages
-from django.views.generic import CreateView, View
+from django.views.generic import CreateView, View, DeleteView
 from django.contrib.auth.models import User
 from django.urls import reverse_lazy
 
 from webApp.users.forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm
 from django.contrib.auth.decorators import login_required
+
+from webApp.users.models import Profile
 
 
 class AppUserRegisterView(CreateView):
@@ -54,6 +56,30 @@ class ProfileView(LoginRequiredMixin, View):
         return render(request, 'users/profile.html', context)
 
 
+class ProfileDeleteView(LoginRequiredMixin, UserPassesTestMixin, View):
+    template_name = 'users/profile-delete-page.html'
+    success_url = reverse_lazy('login')
+
+    def test_func(self):
+        profile = get_object_or_404(Profile, pk=self.kwargs["pk"])
+        return self.request.user == profile.user
+
+    def get(self, request, *args, **kwargs):
+        profile = get_object_or_404(Profile, pk=self.kwargs["pk"])
+        return render(request, self.template_name, {'profile': profile})
+
+    def post(self, request, *args, **kwargs):
+        profile = get_object_or_404(Profile, pk=self.kwargs["pk"])
+        user = profile.user
+
+        user.delete()
+        profile.delete()
+
+        return redirect(self.success_url)
+
+
+
+
 # FBV
 # def register(request):
 #     if request.method == 'POST':
@@ -71,7 +97,6 @@ class ProfileView(LoginRequiredMixin, View):
 #     }
 #
 #     return render(request, 'users/register.html', context)
-
 
 
 # @login_required
