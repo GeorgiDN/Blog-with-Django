@@ -11,6 +11,11 @@
                 </div>
                 <h2><a class="article-title" href="{% url 'post-detail' post.pk %}">{{ post.title }}</a></h2>
                 <p class="article-content">{{ post.content }}</p>
+                
+                <div>
+                    <a href="{% url 'like' post.pk %}" class="btn btn-outline-secondary btn-sm rounded-pill">Like</a>
+                    <span>{{ post.post_likes.count }} likes</span>
+                </div>
             </div>
         </article>
     {% endfor %}

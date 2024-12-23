@@ -44,6 +44,7 @@ INSTALLED_APPS = [
 
     'webApp.blog.apps.BlogConfig',
     'webApp.users.apps.UsersConfig',
+    'webApp.common.apps.CommonConfig',
     'crispy_forms',
     'crispy_bootstrap4',
 
@@ -101,7 +102,6 @@ DATABASES = {
         'PORT': os.environ["DB_PORT"],
     }
 }
-
 
 
 # Password validation

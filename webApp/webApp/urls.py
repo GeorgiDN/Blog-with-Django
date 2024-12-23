@@ -48,6 +48,7 @@ urlpatterns = [
          name='password_reset_complete'
          ),
     path('', include('webApp.blog.urls')),
+    path('common/', include('webApp.common.urls')),
 ]
 
 if settings.DEBUG:
