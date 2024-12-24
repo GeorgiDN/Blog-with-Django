@@ -1,22 +1,53 @@
 {% load static %}
 <div class="comment-section">
-    <form method="POST" action="{% url 'comment' post.pk %}">
-        {% csrf_token %}
-        <textarea name="text" rows="2" cols="30" class="form-control"
-                          placeholder="Add comment..."></textarea>
-        <button type="submit" class="btn btn-primary">Post Comment</button>
-    </form>
-    <span>{{ post.post_comments.count }} comments</span>
+    <span>
+        <a href="#" onclick="toggleComments('{{ post.pk }}'); return false;">
+            {{ post.post_comments.count }} comments
+        </a>
+    </span>
+
+    <div id="comments-{{ post.pk }}" style="display: none;">
+        <form method="post" action="{% url 'comment' post.pk %}">
+            {% csrf_token %}
+            <textarea name="text" rows="2" cols="30" class="form-control"
+                              placeholder="Add comment..."></textarea>
+            <button type="submit" class="btn btn-primary btn-sm mt-2">Add Comment</button>
+        </form>
+
+        {% for comment in post.post_comments.all %}
+            <div class="comment">
+                <img src="{{ comment.user.user_profile.image.url }}" 
+                     class="img-thumbnail rounded-circle" 
+                     style="width: 40px; height: 40px;" 
+                     alt="profile-img">
+                <strong>{{ comment.user.username }}</strong>:
+                <p>{{ comment.text }}</p>
+                <small>{{ comment.date_time_of_publication }}</small>
+            </div>
+        {% endfor %}
+    </div>
 </div>
-<div class="comments-list">
-    {% for comment in post.post_comments.all %}
-        <div class="comment">
-            {% if comment.user.user_profile.image %}
-                <img src="{{ comment.user.user_profile.image.url }}" class="img-thumbnail rounded-circle comment-img" alt="profile-img">
-            {% endif %}
-            <strong>{{ comment.user.username }}</strong>:
-            <p>{{ comment.text }}</p>
-            <small>{{ comment.date_time_of_publication }}</small>
-        </div>
-    {% endfor %}
-</div>
+
+
+{#{% load static %}#}
+{#<div class="comment-section">#}
+{#    <form method="POST" action="{% url 'comment' post.pk %}">#}
+{#        {% csrf_token %}#}
+{#        <textarea name="text" rows="2" cols="30" class="form-control"#}
+{#                          placeholder="Add comment..."></textarea>#}
+{#        <button type="submit" class="btn btn-primary">Post Comment</button>#}
+{#    </form>#}
+{#    <span>{{ post.post_comments.count }} comments</span>#}
+{#</div>#}
+{#<div class="comments-list">#}
+{#    {% for comment in post.post_comments.all %}#}
+{#        <div class="comment">#}
+{#            {% if comment.user.user_profile.image %}#}
+{#                <img src="{{ comment.user.user_profile.image.url }}" class="img-thumbnail rounded-circle comment-img" alt="profile-img">#}
+{#            {% endif %}#}
+{#            <strong>{{ comment.user.username }}</strong>:#}
+{#            <p>{{ comment.text }}</p>#}
+{#            <small>{{ comment.date_time_of_publication }}</small>#}
+{#        </div>#}
+{#    {% endfor %}#}
+{#</div>#}
