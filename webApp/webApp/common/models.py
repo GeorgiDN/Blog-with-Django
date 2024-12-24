@@ -23,6 +23,7 @@ class Like(models.Model):
 
 
 class Comment(models.Model):
+
     text = models.TextField(
         max_length=300,
     )
@@ -39,3 +40,6 @@ class Comment(models.Model):
         on_delete=models.CASCADE,
         related_name='user_comments',
     )
+
+    class Meta:
+        ordering = ['-date_time_of_publication']
