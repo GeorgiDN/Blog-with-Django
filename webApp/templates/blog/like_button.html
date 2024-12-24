@@ -1,7 +1,7 @@
 <div class="post-item">
     <a href="{% url 'like' post.pk %}" 
        class="btn btn-sm rounded-pill {% if post.pk in user_liked_posts %}btn-outline-primary{% else %}btn-outline-secondary{% endif %}">
-        {% if post.pk in user_liked_posts %}Unlike{% else %}Like{% endif %}
+        Like
     </a>
     <span>{{ post.post_likes.count }} likes</span>
 </div>

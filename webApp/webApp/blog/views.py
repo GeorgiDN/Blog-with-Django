@@ -17,37 +17,27 @@ def home(request):
     return render(request, 'blog/home.html', context)
 
 
-# class BaseView(LoginRequiredMixin, TemplateView):
-#     def get_context_data(self, **kwargs):
-#         context = super().get_context_data(**kwargs)
-#         user = self.request.user
-#         if user.is_authenticated:
-#             user_liked_posts = Like.objects.filter(user=user).values_list('to_post_id', flat=True)
-#             context['user_liked_posts'] = user_liked_posts
-#         else:
-#             context['user_liked_posts'] = []
-#         return context
+class BaseView(LoginRequiredMixin):
+    def get_user_liked_posts(self):
+        if self.request.user.is_authenticated:
+            return Like.objects.filter(user=self.request.user).values_list('to_post_id', flat=True)
+        return []
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['user_liked_posts'] = self.get_user_liked_posts()
+        return context
 
 
-class PostListView(ListView):
+class PostListView(BaseView, ListView):
     model = Post
     template_name = 'blog/home.html'
     context_object_name = 'posts'
     ordering = ['-date_posted']
     paginate_by = 5
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        user = self.request.user
-        if user.is_authenticated:
-            user_liked_posts = Like.objects.filter(user=user).values_list('to_post_id', flat=True)
-            context['user_liked_posts'] = user_liked_posts
-        else:
-            context['user_liked_posts'] = []
-        return context
 
-
-class UserPostListView(ListView):
+class UserPostListView(BaseView, ListView):
     model = Post
     template_name = 'blog/user_posts.html'
     context_object_name = 'posts'
@@ -57,29 +47,10 @@ class UserPostListView(ListView):
         user = get_object_or_404(User, username=self.kwargs.get('username'))
         return Post.objects.filter(author=user).order_by('-date_posted')
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        user = self.request.user
-        if user.is_authenticated:
-            user_liked_posts = Like.objects.filter(user=user).values_list('to_post_id', flat=True)
-            context['user_liked_posts'] = user_liked_posts
-        else:
-            context['user_liked_posts'] = []
-        return context
 
-
-class PostDetailView(DetailView):
+class PostDetailView(BaseView, DetailView):
     model = Post
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        user = self.request.user
-        if user.is_authenticated:
-            user_liked_posts = Like.objects.filter(user=user).values_list('to_post_id', flat=True)
-            context['user_liked_posts'] = user_liked_posts
-        else:
-            context['user_liked_posts'] = []
-        return context
 
 class PostCreateView(LoginRequiredMixin, CreateView):
     model = Post
