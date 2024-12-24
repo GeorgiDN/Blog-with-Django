@@ -1,5 +1,6 @@
 from django.contrib.auth.decorators import login_required
 
+from webApp.blog.models import Post
 from webApp.common.models import Like
 from django.shortcuts import redirect
 

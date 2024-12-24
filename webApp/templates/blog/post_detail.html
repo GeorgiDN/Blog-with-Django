@@ -16,10 +16,7 @@
             </div>
             <h2 class="article-title">{{ object.title }}</h2>
             <p class="article-content">{{ object.content }}</p>
-        <div>
-            <a href="{% url 'like' object.pk %}" class="btn btn-outline-secondary btn-sm rounded-pill">Like</a>
-            <span>{{ post.post_likes.count }} likes</span>
-        </div>
+            {% include 'blog/like_button.html' with post=post %}
         </div>
     </article>
     
