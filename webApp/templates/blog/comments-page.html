@@ -1,0 +1,22 @@
+{% load static %}
+<div class="comment-section">
+    <form method="POST" action="{% url 'comment' post.pk %}">
+        {% csrf_token %}
+        <textarea name="text" rows="2" cols="30" class="form-control"
+                          placeholder="Add comment..."></textarea>
+        <button type="submit" class="btn btn-primary">Post Comment</button>
+    </form>
+    <span>{{ post.post_comments.count }} comments</span>
+</div>
+<div class="comments-list">
+    {% for comment in post.post_comments.all %}
+        <div class="comment">
+            {% if comment.user.user_profile.image %}
+                <img src="{{ comment.user.user_profile.image.url }}" class="img-thumbnail rounded-circle comment-img" alt="profile-img">
+            {% endif %}
+            <strong>{{ comment.user.username }}</strong>:
+            <p>{{ comment.text }}</p>
+            <small>{{ comment.date_time_of_publication }}</small>
+        </div>
+    {% endfor %}
+</div>

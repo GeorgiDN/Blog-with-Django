@@ -20,3 +20,22 @@ class Like(models.Model):
 
     class Meta:
         unique_together = ('to_post', 'user')
+
+
+class Comment(models.Model):
+    text = models.TextField(
+        max_length=300,
+    )
+    date_time_of_publication = models.DateTimeField(
+        auto_now_add=True
+    )
+    to_post = models.ForeignKey(
+        to=Post,
+        on_delete=models.CASCADE,
+        related_name='post_comments',
+    )
+    user = models.ForeignKey(
+        to=User,
+        on_delete=models.CASCADE,
+        related_name='user_comments',
+    )

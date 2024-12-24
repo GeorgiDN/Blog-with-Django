@@ -5,6 +5,7 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 from django.contrib.auth.models import User
 from webApp.blog.models import Post
 from webApp.common.models import Like
+from webApp.common.forms import CommentForm
 
 
 def home(request):
@@ -22,6 +23,14 @@ class BaseView(LoginRequiredMixin):
         if self.request.user.is_authenticated:
             return Like.objects.filter(user=self.request.user).values_list('to_post_id', flat=True)
         return []
+
+    def get_user_comment_form(self, post_id=None):
+        """Returns a blank or prefilled CommentForm based on the request."""
+
+        if self.request.method == 'POST' and post_id:
+            post = Post.objects.get(pk=post_id)
+            return CommentForm(self.request.POST)
+        return CommentForm()
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
