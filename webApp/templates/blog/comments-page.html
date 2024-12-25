@@ -22,6 +22,9 @@
                 <strong>{{ comment.user.username }}</strong>:
                 <p>{{ comment.text }}</p>
                 <small>{{ comment.date_time_of_publication }}</small>
+                {% if comment.user == request.user %}
+                     <a href="{% url 'edit_comment' comment.pk %}" class="btn btn-link btn-sm">Edit</a>
+                {% endif %}
             </div>
         {% endfor %}
     </div>
