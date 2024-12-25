@@ -23,43 +23,10 @@
                 <p>{{ comment.text }}</p>
                 <small>{{ comment.date_time_of_publication }}</small>
                 {% if comment.user == request.user %}
-                     <a href="{% url 'edit_comment' comment.pk %}" class="btn btn-link btn-sm">Edit</a>
+                     <a href="{% url 'edit_comment' comment.pk %}" class="btn btn-info btn-sm">Edit</a>
                     <a href="{% url 'delete_comment' comment.id %}" class="btn btn-danger btn-sm">Delete</a>
                 {% endif %}
             </div>
         {% endfor %}
     </div>
 </div>
-
-
-
-{#Save comment with javascript#}
-{#{% load static %}#}
-{#<div class="comment-section">#}
-{#    <span>#}
-{#        <a href="#" onclick="toggleComments('{{ post.pk }}'); return false;">#}
-{#            {{ post.post_comments.count }} comments#}
-{#        </a>#}
-{#    </span>#}
-{##}
-{#    <div id="comments-{{ post.pk }}" style="display: none;">#}
-{##}
-{#        <form id="comment-form-{{ post.pk }}" method="post" action="{% url 'comment' post.pk %}">#}
-{#            {% csrf_token %}#}
-{#            <textarea name="text" rows="2" cols="30" class="form-control"#}
-{#                              placeholder="Add comment..."></textarea>#}
-{#            <a href="#" id="submit-comment-{{ post.pk }}" class="btn btn-primary btn-sm mt-2">Add Comment</a>#}
-{#        </form>#}
-{##}
-{#        {% for comment in post.post_comments.all %}#}
-{#            <div class="comment">#}
-{#                <img src="{{ comment.user.user_profile.image.url }}" #}
-{#                     class="img-thumbnail rounded-circle comment-img"#}
-{#                     alt="profile-img">#}
-{#                <strong>{{ comment.user.username }}</strong>:#}
-{#                <p>{{ comment.text }}</p>#}
-{#                <small>{{ comment.date_time_of_publication }}</small>#}
-{#            </div>#}
-{#        {% endfor %}#}
-{#    </div>#}
-{#</div>#}
