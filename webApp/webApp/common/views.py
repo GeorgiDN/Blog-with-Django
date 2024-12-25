@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.urls.base import reverse
-from django.views.generic import UpdateView
+from django.views.generic import UpdateView, DeleteView
 
 from webApp.blog.models import Post
 from webApp.common.forms import CommentForm, CommentEditForm
@@ -52,3 +52,16 @@ class CommentEditView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         """Check if the logged-in user is the owner of the comment."""
         comment = self.get_object()
         return comment.user == self.request.user
+
+
+class CommentDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    model = Comment
+    template_name = 'blog/delete-comment.html'
+
+    def get_success_url(self):
+        post_id = self.object.to_post.id
+        return reverse('post-detail', args=[post_id]) + f"#comments-{post_id}"
+
+    def test_func(self):
+        comment = self.get_object()
+        return self.request.user == comment.user
