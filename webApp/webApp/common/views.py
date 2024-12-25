@@ -31,4 +31,5 @@ def comments_functionality(request, post_id: int):
             comment.user = request.user
             comment.save()
 
-    return redirect(request.META.get("HTTP_REFERER") + f"#{post_id}")
+    return redirect(f"{request.META.get('HTTP_REFERER')}#comments-{post_id}")
+    # return redirect(request.META.get("HTTP_REFERER") + f"#{post_id}")
