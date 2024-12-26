@@ -41,7 +41,7 @@ def comments_functionality(request, post_id: int):
 class CommentEditView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Comment
     form_class = CommentEditForm
-    template_name = 'blog/edit-comment.html'
+    template_name = 'common/edit-comment.html'
 
     def get_success_url(self):
         """Redirect to the post detail page with the comments section visible."""
@@ -56,7 +56,7 @@ class CommentEditView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
 class CommentDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Comment
-    template_name = 'blog/delete-comment.html'
+    template_name = 'common/delete-comment.html'
 
     def get_success_url(self):
         post_id = self.object.to_post.id

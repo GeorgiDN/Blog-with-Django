@@ -11,8 +11,8 @@
                 </div>
                 <h2><a class="article-title" href="{% url 'post-detail' post.pk %}">{{ post.title }}</a></h2>
                 <p class="article-content">{{ post.content }}</p>
-                {% include 'blog/like_button.html' with post=post %}
-                {% include 'blog/comments-page.html' with post=post %}
+                {% include 'common/like_button.html' with post=post %}
+                {% include 'common/comments-page.html' with post=post %}
             </div>
         </article>
     {% endfor %}
