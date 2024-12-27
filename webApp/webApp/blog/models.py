@@ -17,6 +17,11 @@ class Post(models.Model):
         on_delete=models.CASCADE,
         related_name='user_posts',
     )
+    image = models.ImageField(
+        upload_to='post_images',
+        null=True,
+        blank=True,
+    )
 
     def __str__(self):
         return self.title
