@@ -88,7 +88,10 @@ a.article-title:hover {
     background-color: #eee;
     margin-top: 10px;
     border-radius: 0.2rem
+}
 
+.comment .user-link {
+    text-decoration: none;
 }
 
 .comments-btn-container {
