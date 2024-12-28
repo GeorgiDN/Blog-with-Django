@@ -83,6 +83,18 @@ a.article-title:hover {
     font-size: 2.5rem;
 }
 
+.comment {
+    padding: 0.6rem;
+    background-color: #eee;
+    margin-top: 10px;
+    border-radius: 0.2rem
+
+}
+
+.comments-btn-container {
+    padding-bottom: 6px;
+}
+
 .comment-img {
     height: 30px;
     width: 30px;
@@ -106,5 +118,19 @@ a.article-title:hover {
 	.search-btn {
         left: 175px;
         max-width: 20px;
+    }
+}
+
+@media (max-width: 400px) {
+    .content-section {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+    .comment {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
     }
 }
