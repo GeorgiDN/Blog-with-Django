@@ -1,6 +1,5 @@
 {% extends "blog/base.html" %}
 {% block content %}
-    {% include 'common/search-form.html' %}
     {% for post in posts %}
         {% include 'blog/post-content.html' %}
     {% endfor %}
