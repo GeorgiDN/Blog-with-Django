@@ -26,3 +26,16 @@ class CommentEditForm(forms.ModelForm):
         labels = {
             'text': 'Edit your comment',
         }
+
+
+class SearchForm(forms.Form):
+    post_title = forms.CharField(
+        required=False,
+        widget=forms.TextInput(
+            attrs={"placeholder": "Search by Post title..."}
+        )
+    )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['post_title'].label = ''

@@ -5,7 +5,7 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 from django.contrib.auth.models import User
 from webApp.blog.models import Post
 from webApp.common.models import Like
-from webApp.common.forms import CommentForm
+from webApp.common.forms import CommentForm, SearchForm
 
 
 def home(request):
@@ -35,7 +35,17 @@ class BaseView(LoginRequiredMixin):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['user_liked_posts'] = self.get_user_liked_posts()
+        context["search_form"] = SearchForm(self.request.GET)
         return context
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        post_title = self.request.GET.get('post_title')
+
+        if post_title:
+            queryset = queryset.filter(title__icontains=post_title)
+
+        return queryset
 
 
 class PostListView(BaseView, ListView):
@@ -52,9 +62,14 @@ class UserPostListView(BaseView, ListView):
     context_object_name = 'posts'
     paginate_by = 5
 
+    # def get_queryset(self):
+    #     user = get_object_or_404(User, username=self.kwargs.get('username'))
+    #     return Post.objects.filter(author=user).order_by('-date_posted')
+
     def get_queryset(self):
         user = get_object_or_404(User, username=self.kwargs.get('username'))
-        return Post.objects.filter(author=user).order_by('-date_posted')
+        queryset = super().get_queryset()  # Inherit search logic
+        return queryset.filter(author=user).order_by('-date_posted')
 
 
 class PostDetailView(BaseView, DetailView):
