@@ -1,0 +1,28 @@
+.comment {
+    padding: 0.6rem;
+    background-color: #eee;
+    margin-top: 10px;
+    border-radius: 0.2rem
+}
+
+.comment .user-link {
+    text-decoration: none;
+}
+
+.comments-btn-container {
+    padding-bottom: 6px;
+}
+
+.comment-img {
+    height: 30px;
+    width: 30px;
+    margin-right: 2px;
+}
+
+@media (max-width: 400px) {
+    .comment {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+}
