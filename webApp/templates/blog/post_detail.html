@@ -1,4 +1,10 @@
 {% extends "blog/base.html" %}
 {% block content %}
     {% include 'blog/post-content.html' %}
+    {% if object.author == user %}
+        <div>
+            <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'post-update' object.pk %}">Update Post</a>
+            <a class="btn btn-danger btn-sm mt-1 mb-1" href="{% url 'post-delete' object.pk %}">Delete Post</a>
+        </div>
+    {% endif %}
 {% endblock content %}
