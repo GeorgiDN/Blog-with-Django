@@ -49,6 +49,7 @@ urlpatterns = [
          ),
     path('', include('webApp.blog.urls')),
     path('common/', include('webApp.common.urls')),
+    path('profile/remove-image/', user_views.ConfirmRemoveImageView.as_view(), name='confirm_remove_image'),
 ]
 
 if settings.DEBUG:

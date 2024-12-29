@@ -17,10 +17,14 @@
             <legend class="border-bottom mb-4">Profile Info</legend>
             {{ u_form|crispy }}
             {{ p_form|crispy }}
+             {% if request.user.user_profile.image.url != 'default.jpg' %}
+                 <a href="{% url 'confirm_remove_image' %}" class="btn btn-danger">Remove Image</a>
+            {% endif %}
+            
         </fieldset>
         <div class="form-group">
             <button class="btn btn-outline-info" type="submit">Update</button>
-            <a href="{% url 'profile-delete' pk=request.user.user_profile.pk %}">Delete</a>
+            <a class="btn btn-danger" href="{% url 'profile-delete' pk=request.user.user_profile.pk %}">Delete</a>
         </div>
     </form>
 {% endblock %}

@@ -78,6 +78,18 @@ class ProfileDeleteView(LoginRequiredMixin, UserPassesTestMixin, View):
         return redirect(self.success_url)
 
 
+class ConfirmRemoveImageView(LoginRequiredMixin, View):
+    def get(self, request, *args, **kwargs):
+        return render(request, 'users/confirm_remove_image.html')
+
+    def post(self, request, *args, **kwargs):
+        profile = request.user.user_profile
+        profile.image = 'default.jpg'
+        profile.save()
+        messages.success(request, 'Your profile image has been removed!')
+        return redirect('profile')
+
+
 
 
 # FBV
