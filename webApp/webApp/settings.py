@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'webApp.blog.apps.BlogConfig',
     'webApp.users.apps.UsersConfig',
     'webApp.common.apps.CommonConfig',
+    'webApp.messaging.apps.MessagingConfig',
     'crispy_forms',
     'crispy_bootstrap4',
 
