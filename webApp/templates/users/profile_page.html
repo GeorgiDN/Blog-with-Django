@@ -1,0 +1,16 @@
+{% extends "blog/base.html" %}
+{% block content %}
+    <h1>{{ profile.user.username }}'s Profile</h1>
+    <img src="{{ profile.image.url }}" alt="{{ profile.user.username }}'s profile picture" width="150">
+    <h4><strong>
+        <a class="mr-2" href="{% url 'user-posts' profile.user.username %}">Posts by {{ profile.user.username }}</a>
+    </strong></h4>
+    <p><strong>First Name:</strong> {{ profile.first_name }}</p>
+    <p><strong>Last Name:</strong> {{ profile.last_name }}</p>
+    <p><strong>Phone:</strong> {{ profile.phone }}</p>
+    <p><strong>Country:</strong> {{ profile.country }}</p>
+    <p><strong>City:</strong> {{ profile.city }}</p>
+    <p><strong>Address:</strong> {{ profile.address }}</p>
+    <p><strong>Company:</strong> {{ profile.company }}</p>
+    <p><strong>School:</strong> {{ profile.school }}</p>
+{% endblock %}

@@ -21,6 +21,7 @@ from webApp.users import views as user_views
 from django.conf import settings
 from django.conf.urls.static import static
 
+from webApp.users.views import ProfileDetailView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -50,6 +51,7 @@ urlpatterns = [
     path('', include('webApp.blog.urls')),
     path('common/', include('webApp.common.urls')),
     path('profile/remove-image/', user_views.ConfirmRemoveImageView.as_view(), name='confirm_remove_image'),
+    path('profile/<str:username>/', ProfileDetailView.as_view(), name='profile-view'),
 ]
 
 if settings.DEBUG:

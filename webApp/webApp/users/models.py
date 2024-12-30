@@ -2,6 +2,8 @@ from django.db import models
 from django.contrib.auth.models import User
 from PIL import Image
 
+from webApp.users.validators import PhoneValidator
+
 
 class Profile(models.Model):
     user = models.OneToOneField(
@@ -12,6 +14,47 @@ class Profile(models.Model):
     image = models.ImageField(
         default='default.jpg',
         upload_to='profile_pics'
+    )
+    first_name = models.CharField(
+        max_length=50,
+        null=True,
+        blank=True
+    )
+    last_name = models.CharField(
+        max_length=50,
+        null=True,
+        blank=True
+    )
+    phone = models.CharField(
+        max_length=15,
+        null=True,
+        blank=True,
+        validators=[PhoneValidator()]
+    )
+    company = models.CharField(
+        max_length=100,
+        blank=True,
+        null=True
+    )
+    school = models.CharField(
+        max_length=100,
+        blank=True,
+        null=True
+    )
+    country = models.CharField(
+        max_length=50,
+        blank=True,
+        null=True
+    )
+    city = models.CharField(
+        max_length=50,
+        blank=True,
+        null=True
+    )
+    address = models.CharField(
+        max_length=100,
+        blank=True,
+        null=True
     )
 
     def __str__(self):

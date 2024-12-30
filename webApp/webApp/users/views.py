@@ -2,7 +2,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login
 from django.contrib import messages
-from django.views.generic import CreateView, View, DeleteView
+from django.views.generic import CreateView, View, DeleteView, DetailView
 from django.contrib.auth.models import User
 from django.urls import reverse_lazy
 
@@ -88,6 +88,17 @@ class ConfirmRemoveImageView(LoginRequiredMixin, View):
         profile.save()
         messages.success(request, 'Your profile image has been removed!')
         return redirect('profile')
+
+
+class ProfileDetailView(DetailView):
+    model = Profile
+    template_name = 'users/profile_page.html'
+    context_object_name = 'profile'
+
+    def get_object(self, **kwargs):
+        username = self.kwargs.get('username')
+        return get_object_or_404(Profile, user__username=username)
+
 
 
 
