@@ -1,7 +1,5 @@
 from django.contrib.auth.models import User
 from django.shortcuts import render
-
-from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from .models import Message
@@ -14,7 +12,12 @@ def conversations_list(request):
     conversations = User.objects.filter(
         Q(sent_messages__recipient=user) | Q(received_messages__sender=user)
     ).distinct()
-    return render(request, 'messaging/conversations_list.html', {'conversations': conversations})
+
+    context = {
+        'conversations': conversations
+    }
+
+    return render(request, 'messaging/conversations_list.html', context)
 
 
 @login_required
@@ -27,9 +30,16 @@ def conversation_detail(request, username):
         Q(sender=user, recipient=recipient) | Q(sender=recipient, recipient=user)
     ).order_by('timestamp')
 
+    messages.filter(recipient=user, is_read=False).update(is_read=True)
+
     if request.method == "POST":
         content = request.POST.get('content')
         if content:
             Message.objects.create(sender=user, recipient=recipient, content=content)
 
-    return render(request, 'messaging/conversation_detail.html', {'recipient': recipient, 'messages': messages})
+    context = {
+        'recipient': recipient,
+        'messages': messages,
+    }
+
+    return render(request, 'messaging/conversation_detail.html', context)
