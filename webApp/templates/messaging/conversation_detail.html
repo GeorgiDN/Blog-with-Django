@@ -1,35 +1,43 @@
 {% extends 'blog/base.html' %}
 {% block content %}
-<h1>
-<a href="{% url 'profile-view' recipient.username %}">
-    <img class="rounded-circle article-img" src="{{ recipient.user_profile.image.url }}" alt="{{ user.username }}'s profile picture">{{ recipient.username }}
-</a>
-</h1>
-<div>
-    {% for message in conversation_messages %}
-        {% if message.sender == request.user %}
-            <div class="message sent mb-3">
-                <p class="message-content"><strong>You:</strong> {{ message.content }}</p>
-                <span class="hide-time">{{ message.timestamp }}</span>
-            </div>
-        {% else %}
-            <div class="incoming-message-content">
-                <div>
-                    <img class="rounded-circle article-img profile-img" src="{{ recipient.user_profile.image.url }}" alt="{{ user.username }}'s profile picture">
+    <h1>
+        <a href="{% url 'profile-view' recipient.username %}">
+            <img class="rounded-circle article-img" src="{{ recipient.user_profile.image.url }}"
+                 alt="{{ user.username }}'s profile picture">{{ recipient.username }}
+        </a>
+    </h1>
+    <div>
+        {% for message in conversation_messages %}
+            {% if message.sender == request.user %}
+                <div id="message-{{ message.pk }}">
+                    <div class="message sent mb-3">
+                        <p class="message-content"><strong>You:</strong> {{ message.content }}</p>
+                        <span class="hide-time">{{ message.timestamp }}</span>
+                        <div class="comments-btn-container">
+                            <a href="{% url 'edit-message' message.pk %}" class="btn btn-info btn-sm">Edit</a>
+                        </div>
+                    </div>
                 </div>
-                <div class="message incoming mb-3">
-                    <p class="message-content"><strong>{{ message.sender.username }}:</strong> {{ message.content }}</p>
-                    <span class="hide-time">{{ message.timestamp }}</span>
+            {% else %}
+                <div class="incoming-message-content">
+                    <div>
+                        <img class="rounded-circle article-img profile-img" src="{{ recipient.user_profile.image.url }}"
+                             alt="{{ user.username }}'s profile picture">
+                    </div>
+                    <div class="message incoming mb-3">
+                        <p class="message-content"><strong>{{ message.sender.username }}:</strong> {{ message.content }}
+                        </p>
+                        <span class="hide-time">{{ message.timestamp }}</span>
+                    </div>
                 </div>
-            </div>
-        {% endif %}
-    {% endfor %}
-</div>
-    
-<form method="post">
-    {% csrf_token %}
-    <textarea name="content" rows="3" cols="50" placeholder="Type your message here..."></textarea>
-    <button type="submit">Send</button>
-</form>
+            {% endif %}
+        {% endfor %}
+    </div>
+
+    <form method="post">
+        {% csrf_token %}
+        <textarea name="content" rows="3" cols="50" placeholder="Type your message here..."></textarea>
+        <button type="submit">Send</button>
+    </form>
 
 {% endblock %}

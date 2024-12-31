@@ -1,7 +1,12 @@
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.models import User
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q, Count
+from django.urls.base import reverse
+from django.views.generic import UpdateView
+
+from .forms import MessageEditForm
 from .models import Message
 
 
@@ -38,9 +43,6 @@ def conversation_detail(request, username):
 
     conversation_messages.filter(recipient=user, is_read=False).update(is_read=True)
 
-    incoming_messages = Message.objects.filter(Q(sender=recipient, recipient=user))
-    sent_messages = Message.objects.filter(Q(sender=recipient, recipient=user))
-
     if request.method == "POST":
         content = request.POST.get('content')
         if content:
@@ -49,8 +51,19 @@ def conversation_detail(request, username):
     context = {
         'recipient': recipient,
         'conversation_messages': conversation_messages,
-        'incoming_messages': incoming_messages,
-        'sent_messages': sent_messages,
     }
 
     return render(request, 'messaging/conversation_detail.html', context)
+
+
+class MessageEditView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    model = Message
+    form_class = MessageEditForm
+    template_name = 'messaging/edit_message.html'
+
+    def get_success_url(self):
+        return reverse('conversation-detail', args=[self.object.recipient.username]) + f"#message-{self.object.pk}"
+
+    def test_func(self):
+        curr_message = self.get_object()
+        return curr_message.sender == self.request.user
