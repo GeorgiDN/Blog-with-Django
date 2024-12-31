@@ -6,3 +6,24 @@
     font-size: 0.9em;
     vertical-align: top;
 }
+
+.message {
+    padding: 10px;
+    margin: 5px;
+    border-radius: 10px;
+    max-width: 60%;
+    word-wrap: break-word;
+}
+
+.message.sent {
+    background-color: #dcf8c6;
+    text-align: right;
+    margin-left: auto;
+}
+
+.message.incoming {
+    background-color: #eee;
+    text-align: left;
+    margin-right: auto;
+    border: 1px solid #ddd;
+}

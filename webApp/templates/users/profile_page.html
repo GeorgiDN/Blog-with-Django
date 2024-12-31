@@ -5,6 +5,9 @@
     <h4><strong>
         <a class="mr-2" href="{% url 'user-posts' profile.user.username %}">Posts by {{ profile.user.username }}</a>
     </strong></h4>
+    <p><strong>Start conversation with</strong>
+        <a href="{% url 'conversation-detail' profile.user.username %}">{{ profile.user.username }}</a>
+    </p>
     <p><strong>First Name:</strong> {{ profile.first_name }}</p>
     <p><strong>Last Name:</strong> {{ profile.last_name }}</p>
     <p><strong>Phone:</strong> {{ profile.phone }}</p>

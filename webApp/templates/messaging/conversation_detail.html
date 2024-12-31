@@ -1,12 +1,27 @@
 {% extends 'blog/base.html' %}
 {% block content %}
 <h1>Conversation with {{ recipient.username }}</h1>
+{#<div>#}
+{#    {% for message in messages %}#}
+{#        <p><strong>{{ message.sender.username }}:</strong> {{ message.content }}</p>#}
+{#    {% endfor %}#}
+{#</div>#}
+    
 <div>
     {% for message in messages %}
-        <p><strong>{{ message.sender.username }}:</strong> {{ message.content }}</p>
+        {% if message.sender == request.user %}
+            <div class="message sent">
+                <p><strong>You:</strong> {{ message.content }}</p>
+            </div>
+        {% else %}
+            <div class="message incoming">
+                <p><strong>{{ message.sender.username }}:</strong> {{ message.content }}</p>
+            </div>
+        {% endif %}
     {% endfor %}
 </div>
 
+    
 <form method="post">
     {% csrf_token %}
     <textarea name="content" rows="3" cols="50" placeholder="Type your message here..."></textarea>

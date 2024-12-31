@@ -1,9 +1,16 @@
 {% extends 'blog/base.html' %}
 {% block content %}
-<h1>Your Conversations</h1>
-<ul>
-    {% for user in conversations %}
-        <li><a href="{% url 'conversation-detail' user.username %}">{{ user.username }}</a></li>
-    {% endfor %}
-</ul>
+    <h1>Your Conversations</h1>
+    <ul>
+        {% for user in conversations %}
+            <li>
+                <a 
+                    href="{% url 'conversation-detail' user.username %}">{{ user.username }}
+                    {% if user.unread_count > 0 %}
+                        <span class="badge badge-danger">new</span>
+                    {% endif %}
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
 {% endblock %}
