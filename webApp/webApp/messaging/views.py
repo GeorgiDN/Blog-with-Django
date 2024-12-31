@@ -30,7 +30,6 @@ def conversations_list(request):
 def conversation_detail(request, username):
     user = request.user
     recipient = User.objects.get(username=username)
-    sender = User.objects.get(username=username)
 
     # Fetch messages exchanged between the two users
     conversation_messages = Message.objects.filter(
@@ -51,7 +50,7 @@ def conversation_detail(request, username):
         'recipient': recipient,
         'conversation_messages': conversation_messages,
         'incoming_messages': incoming_messages,
-        'sent_messages': sent_messages
+        'sent_messages': sent_messages,
     }
 
     return render(request, 'messaging/conversation_detail.html', context)

@@ -13,6 +13,7 @@
     border-radius: 10px;
     max-width: 60%;
     word-wrap: break-word;
+    position: relative;
 }
 
 .message.sent {
@@ -26,6 +27,7 @@
     text-align: left;
     margin-right: auto;
     border: 1px solid #ddd;
+    flex-grow: 1;
 }
 
 .conversations .conversations-list li {
@@ -34,4 +36,30 @@
 
 .conversations .conversations-list li a {
     font-size: 18px;
+}
+
+.hide-time {
+    display: none;
+}
+
+.message-content:hover ~ .hide-time {
+    display: block;
+    background-color: lightgray;
+    padding: 4px;
+    border-radius: 4px;
+    position: absolute;
+    top: -14px;
+    z-index: 1;
+    font-size: 12px;
+}
+
+.incoming-message-content {
+    display: flex;
+    align-items: center;
+}
+
+.profile-img {
+    height: 50px;
+    width: 50px;
+    margin-right: 8px;
 }

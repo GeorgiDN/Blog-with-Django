@@ -1,19 +1,26 @@
 {% extends 'blog/base.html' %}
 {% block content %}
 <h1>
-<a href="{% url 'profile-view' user.username %}">
-    <img class="rounded-circle article-img" src="{{ user.user_profile.image.url }}" alt="{{ user.username }}'s profile picture">{{ recipient.username }}
+<a href="{% url 'profile-view' recipient.username %}">
+    <img class="rounded-circle article-img" src="{{ recipient.user_profile.image.url }}" alt="{{ user.username }}'s profile picture">{{ recipient.username }}
 </a>
 </h1>
 <div>
     {% for message in conversation_messages %}
         {% if message.sender == request.user %}
-            <div class="message sent">
-                <p><strong>You:</strong> {{ message.content }}</p>
+            <div class="message sent mb-3">
+                <p class="message-content"><strong>You:</strong> {{ message.content }}</p>
+                <span class="hide-time">{{ message.timestamp }}</span>
             </div>
         {% else %}
-            <div class="message incoming">
-                <p><strong>{{ message.sender.username }}:</strong> {{ message.content }}</p>
+            <div class="incoming-message-content">
+                <div>
+                    <img class="rounded-circle article-img profile-img" src="{{ recipient.user_profile.image.url }}" alt="{{ user.username }}'s profile picture">
+                </div>
+                <div class="message incoming mb-3">
+                    <p class="message-content"><strong>{{ message.sender.username }}:</strong> {{ message.content }}</p>
+                    <span class="hide-time">{{ message.timestamp }}</span>
+                </div>
             </div>
         {% endif %}
     {% endfor %}
