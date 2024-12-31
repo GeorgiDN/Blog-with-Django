@@ -4,7 +4,7 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q, Count
 from django.urls.base import reverse
-from django.views.generic import UpdateView
+from django.views.generic import UpdateView, DeleteView
 
 from .forms import MessageEditForm
 from .models import Message
@@ -60,6 +60,18 @@ class MessageEditView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Message
     form_class = MessageEditForm
     template_name = 'messaging/edit_message.html'
+
+    def get_success_url(self):
+        return reverse('conversation-detail', args=[self.object.recipient.username]) + f"#message-{self.object.pk}"
+
+    def test_func(self):
+        curr_message = self.get_object()
+        return curr_message.sender == self.request.user
+
+
+class MessageDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    model = Message
+    template_name = 'messaging/delete_message.html'
 
     def get_success_url(self):
         return reverse('conversation-detail', args=[self.object.recipient.username]) + f"#message-{self.object.pk}"
