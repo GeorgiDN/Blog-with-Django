@@ -1,9 +1,11 @@
 {% extends 'blog/base.html' %}
 {% block content %}
+<div class="conversations">
     <h1>Your Conversations</h1>
-    <ul>
+    <ul class="conversations-list">
         {% for user in conversations %}
-            <li>
+            <li class="mb-2">
+                <img class="rounded-circle article-img" src="{{ user.user_profile.image.url }}" alt="{{ user.username }}'s profile picture">
                 <a 
                     href="{% url 'conversation-detail' user.username %}">{{ user.username }}
                     {% if user.unread_count > 0 %}
@@ -13,4 +15,5 @@
             </li>
         {% endfor %}
     </ul>
+</div>
 {% endblock %}

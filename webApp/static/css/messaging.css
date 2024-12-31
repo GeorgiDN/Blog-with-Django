@@ -27,3 +27,11 @@
     margin-right: auto;
     border: 1px solid #ddd;
 }
+
+.conversations .conversations-list li {
+    list-style-type: none;
+}
+
+.conversations .conversations-list li a {
+    font-size: 18px;
+}

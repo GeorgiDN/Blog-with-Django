@@ -1,14 +1,12 @@
 {% extends 'blog/base.html' %}
 {% block content %}
-<h1>Conversation with {{ recipient.username }}</h1>
-{#<div>#}
-{#    {% for message in messages %}#}
-{#        <p><strong>{{ message.sender.username }}:</strong> {{ message.content }}</p>#}
-{#    {% endfor %}#}
-{#</div>#}
-    
+<h1>
+<a href="{% url 'profile-view' user.username %}">
+    <img class="rounded-circle article-img" src="{{ user.user_profile.image.url }}" alt="{{ user.username }}'s profile picture">{{ recipient.username }}
+</a>
+</h1>
 <div>
-    {% for message in messages %}
+    {% for message in conversation_messages %}
         {% if message.sender == request.user %}
             <div class="message sent">
                 <p><strong>You:</strong> {{ message.content }}</p>
@@ -20,7 +18,6 @@
         {% endif %}
     {% endfor %}
 </div>
-
     
 <form method="post">
     {% csrf_token %}
