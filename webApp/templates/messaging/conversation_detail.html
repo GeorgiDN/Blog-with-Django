@@ -1,12 +1,12 @@
 {% extends 'blog/base.html' %}
 {% block content %}
     <div id="last-message-data" data-last-message-id="{{ last_message_id }}"></div>
-    <h1 class="message-header">
+    <h2 class="message-header">
         <a href="{% url 'profile-view' recipient.username %}">
-            <img class="rounded-circle article-img" src="{{ recipient.user_profile.image.url }}"
+            <img class="rounded-circle article-img profile-img" src="{{ recipient.user_profile.image.url }}"
                  alt="{{ user.username }}'s profile picture">{{ recipient.username }}
         </a>
-    </h1>
+    </h2>
     <div>
         {% for message in conversation_messages %}
             {% if message.sender == request.user %}
@@ -36,9 +36,11 @@
         {% endfor %}
     </div>
 
-    <form method="post">
+    <form class="sent-message-form" method="post">
         {% csrf_token %}
-        <textarea name="content" rows="3" cols="50" placeholder="Type your message here..."></textarea>
+        <textarea name="content" rows="1" cols="50" placeholder="Type your message here..."></textarea>
         <button type="submit">Send</button>
     </form>
+    
+    <small id="char-count">0/500</small>
 {% endblock %}
