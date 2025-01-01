@@ -1,6 +1,7 @@
 {% extends 'blog/base.html' %}
 {% block content %}
-    <h1>
+    <div id="last-message-data" data-last-message-id="{{ last_message_id }}"></div>
+    <h1 class="message-header">
         <a href="{% url 'profile-view' recipient.username %}">
             <img class="rounded-circle article-img" src="{{ recipient.user_profile.image.url }}"
                  alt="{{ user.username }}'s profile picture">{{ recipient.username }}
@@ -40,5 +41,4 @@
         <textarea name="content" rows="3" cols="50" placeholder="Type your message here..."></textarea>
         <button type="submit">Send</button>
     </form>
-
 {% endblock %}

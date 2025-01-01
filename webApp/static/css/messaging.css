@@ -7,6 +7,16 @@
     vertical-align: top;
 }
 
+.message-header {
+    position: sticky;
+    top: 50px;
+    background-color: #fafafa;
+    z-index: 2;
+    padding: 15px 0 15px 0;
+    border-bottom: 1px solid #ddd;
+    margin-top: -5px;
+}
+
 .message {
     padding: 10px;
     margin: 5px;
@@ -20,6 +30,7 @@
     background-color: #dcf8c6;
     text-align: right;
     margin-left: auto;
+    z-index: 1;
 }
 
 .message.incoming {
@@ -28,6 +39,7 @@
     margin-right: auto;
     border: 1px solid #ddd;
     flex-grow: 1;
+    z-index: 1;
 }
 
 .conversations .conversations-list li {
@@ -63,3 +75,4 @@
     width: 50px;
     margin-right: 8px;
 }
+

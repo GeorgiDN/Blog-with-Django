@@ -47,6 +47,8 @@ class ConversationDetailView(LoginRequiredMixin, DetailView):
         conversation_messages.filter(recipient=user, is_read=False).update(is_read=True)
 
         context['conversation_messages'] = conversation_messages
+        context['last_message_id'] = conversation_messages.last().pk\
+            if conversation_messages.exists() else None
         return context
 
     def post(self, request, *args, **kwargs):
@@ -55,11 +57,20 @@ class ConversationDetailView(LoginRequiredMixin, DetailView):
         content = request.POST.get('content')
 
         if content:
-            Message.objects.create(sender=user, recipient=recipient, content=content)
+            new_message = Message.objects.create(
+                sender=user,
+                recipient=recipient,
+                content=content)
+
+            self.last_message_id = new_message.pk
 
         return redirect(self.get_success_url())
 
     def get_success_url(self):
+        last_message_id = getattr(self, 'last_message_id', None)
+        if last_message_id:
+            return reverse('conversation-detail',
+                           kwargs={'username': self.get_object().username}) + f"#message-{last_message_id}"
         return reverse('conversation-detail', kwargs={'username': self.get_object().username})
 
 
@@ -69,7 +80,10 @@ class MessageEditView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     template_name = 'messaging/edit_message.html'
 
     def get_success_url(self):
-        return reverse('conversation-detail', args=[self.object.recipient.username]) + f"#message-{self.object.pk}"
+        return (reverse(
+            'conversation-detail',
+            args=[self.object.recipient.username])
+                + f"#message-{self.object.pk}")
 
     def test_func(self):
         curr_message = self.get_object()
@@ -81,7 +95,10 @@ class MessageDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     template_name = 'messaging/delete_message.html'
 
     def get_success_url(self):
-        return reverse('conversation-detail', args=[self.object.recipient.username]) + f"#message-{self.object.pk}"
+        return (reverse(
+            'conversation-detail',
+            args=[self.object.recipient.username])
+                + f"#message-{self.object.pk}")
 
     def test_func(self):
         curr_message = self.get_object()

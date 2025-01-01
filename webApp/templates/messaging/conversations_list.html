@@ -5,7 +5,7 @@
     <ul class="conversations-list">
         {% for user in conversations %}
             <li class="mb-2">
-                <img class="rounded-circle article-img" src="{{ user.user_profile.image.url }}" alt="{{ user.username }}'s profile picture">
+                <img class="rounded-circle article-img profile-img" src="{{ user.user_profile.image.url }}" alt="{{ user.username }}'s profile picture">
                 <a 
                     href="{% url 'conversation-detail' user.username %}">{{ user.username }}
                     {% if user.unread_count > 0 %}
