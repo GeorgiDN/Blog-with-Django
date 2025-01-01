@@ -35,10 +35,10 @@
                         <p class="message-content"><strong>{{ message.sender.username }}:</strong> {{ message.content }}
                         </p>
                         {% if message.file %}
-                                <p><a href="{{ message.file.url }}" download>
-                                    <i class="fa-solid fa-download"></i>
-                                </a></p>
-                            {% endif %}
+                            <p><a href="{{ message.file.url }}" download>
+                                <i class="fa-solid fa-download"></i>
+                            </a></p>
+                        {% endif %}
                         <span class="hide-time">{{ message.timestamp }}</span>
                     </div>
                 </div>
@@ -49,9 +49,13 @@
     <form class="sent-message-form" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         <textarea name="content" rows="1" cols="50" placeholder="Type your message here..."></textarea>
-        <input type="file" name="file">
+        <input type="file" name="file" id="fileInput" style="display: none;" onchange="updateFileName(this)">
+        <label for="fileInput" class="custom-file-upload">
+            <i class="fa fa-upload"></i>Upload
+        </label>
+         <span id="fileName" class="text-muted"></span>
         <button type="submit">Send</button>
     </form>
-    
+
     <small id="char-count">0/500</small>
 {% endblock %}

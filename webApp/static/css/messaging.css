@@ -103,3 +103,23 @@
     display: none !important;
 }
 
+.custom-file-upload {
+    display: inline-block;
+    cursor: pointer;
+    color: #007bff;
+    text-decoration: none;
+}
+
+.custom-file-upload:hover {
+    text-decoration: underline;
+}
+
+.custom-file-upload i {
+    margin-right: 5px;
+}
+
+#fileName {
+    margin-left: 10px;
+    font-style: italic;
+}
+
