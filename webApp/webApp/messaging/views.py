@@ -17,7 +17,7 @@ class ConversationsListView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         user = self.request.user
-        return User.objects.filter(
+        return User.objects.prefetch_related('sent_messages', 'received_messages').filter(
             Q(sent_messages__recipient=user) | Q(received_messages__sender=user)
         ).distinct().annotate(
             unread_count=Count(
@@ -40,7 +40,7 @@ class ConversationDetailView(LoginRequiredMixin, DetailView):
         user = self.request.user
         recipient = self.get_object()
 
-        conversation_messages = Message.objects.filter(
+        conversation_messages = Message.objects.select_related('sender', 'recipient').filter(
             Q(sender=user, recipient=recipient) | Q(sender=recipient, recipient=user)
         ).order_by('timestamp')
 
