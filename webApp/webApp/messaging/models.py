@@ -15,8 +15,17 @@ class Message(models.Model):
         on_delete=models.CASCADE
     )
     content = models.TextField()
-    timestamp = models.DateTimeField(default=now)
-    is_read = models.BooleanField(default=False)
+    timestamp = models.DateTimeField(
+        default=now
+    )
+    is_read = models.BooleanField(
+        default=False
+    )
+    file = models.FileField(
+        upload_to='message_files/',
+        null=True,
+        blank=True
+    )
 
     def __str__(self):
         return f"Message from {self.sender} to {self.recipient} at {self.timestamp}"

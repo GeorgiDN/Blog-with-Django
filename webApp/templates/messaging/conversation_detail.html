@@ -15,6 +15,11 @@
                         <p class="message-content"><strong>You:</strong> {{ message.content }}</p>
                         <span class="hide-time">{{ message.timestamp }}</span>
                         <div class="comments-btn-container">
+                            {% if message.file %}
+                                <a href="{{ message.file.url }}" download>
+                                    <i class="fa-solid fa-download"></i>
+                                </a>
+                            {% endif %}
                             <a href="{% url 'edit-message' message.pk %}" class="btn btn-info btn-sm">Edit</a>
                             <a href="{% url 'delete-message' message.pk %}" class="btn btn-danger btn-sm">Delete</a>
                         </div>
@@ -29,6 +34,11 @@
                     <div class="message incoming mb-3">
                         <p class="message-content"><strong>{{ message.sender.username }}:</strong> {{ message.content }}
                         </p>
+                        {% if message.file %}
+                                <p><a href="{{ message.file.url }}" download>
+                                    <i class="fa-solid fa-download"></i>
+                                </a></p>
+                            {% endif %}
                         <span class="hide-time">{{ message.timestamp }}</span>
                     </div>
                 </div>
@@ -36,9 +46,10 @@
         {% endfor %}
     </div>
 
-    <form class="sent-message-form" method="post">
+    <form class="sent-message-form" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         <textarea name="content" rows="1" cols="50" placeholder="Type your message here..."></textarea>
+        <input type="file" name="file">
         <button type="submit">Send</button>
     </form>
     

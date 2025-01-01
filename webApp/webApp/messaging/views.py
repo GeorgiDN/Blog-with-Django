@@ -55,12 +55,14 @@ class ConversationDetailView(LoginRequiredMixin, DetailView):
         user = self.request.user
         recipient = self.get_object()
         content = request.POST.get('content')
+        file = request.FILES.get('file')
 
-        if content:
+        if content or file:
             new_message = Message.objects.create(
                 sender=user,
                 recipient=recipient,
-                content=content)
+                content=content,
+                file=file)
 
             self.last_message_id = new_message.pk
 
