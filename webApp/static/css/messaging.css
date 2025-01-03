@@ -78,7 +78,7 @@
 
 .sent-message-form {
     display: flex;
-    gap: 0.5rem;
+    gap: 0.2rem;
     justify-content: center;
     padding-bottom: 1rem;
     align-items: flex-end;
@@ -103,6 +103,10 @@
     display: none !important;
 }
 
+.fa-download {
+    font-size: 20px;
+}
+
 .custom-file-upload {
     display: inline-block;
     cursor: pointer;
@@ -115,11 +119,60 @@
 }
 
 .custom-file-upload i {
-    margin-right: 5px;
+    margin-left: 10px;
+    font-size: 20px;
 }
 
 #fileName {
     margin-left: 10px;
     font-style: italic;
 }
+
+.upload {
+    display: none;
+}
+
+.fa-upload:hover ~ .upload {
+    display: block;
+    background-color: lightgray;
+    padding: 2px;
+    z-index: 1;
+    font-size: 12px;
+    position: absolute;
+    border-radius: 5px;
+    color: brown;
+}
+
+@media (max-width: 768px) {
+    .hide-time {
+        display: block;
+        background-color: lightgray;
+        padding: 4px;
+        border-radius: 4px;
+        position: absolute;
+        top: -26px;
+        z-index: 1;
+        font-size: 12px;
+    }
+
+    .message-content:hover ~ .hide-time {
+        display: block;
+    }
+
+    .message {
+        margin-top: 22px !important;
+    }
+
+    .sent {
+        margin-top: 36px !important;
+    }
+}
+
+@media (max-width: 450px) {
+    .profile-img {
+        width: 40px;
+        height: 40px;
+    }
+}
+
 

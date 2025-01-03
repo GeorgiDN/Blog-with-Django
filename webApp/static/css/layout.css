@@ -55,9 +55,9 @@ a.article-title:hover {
     cursor: pointer;
 }
 
-@media (max-width: 770px) {
+@media (max-width: 765px) {
 	.search-btn {
-        left: 175px;
+        left: 170px;
         max-width: 20px;
     }
 }
