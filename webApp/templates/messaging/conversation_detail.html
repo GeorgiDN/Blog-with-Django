@@ -14,7 +14,7 @@
                     <div class="message sent mb-3">
                         <p class="message-content"><strong>You:</strong> {{ message.content }}</p>
                         <span class="hide-time">{{ message.timestamp }}</span>
-                        <div class="comments-btn-container">
+                        <div class="message-btn-container">
                             {% if message.file %}
                                 <a href="{{ message.file.url }}" download>
                                     <i class="fa-solid fa-download"></i>
