@@ -23,15 +23,17 @@ class BaseView(LoginRequiredMixin):
 
 @login_required
 def likes_to_comment_functionality(request, comment_id: int):
+    comment = get_object_or_404(Comment, pk=comment_id)
+    post_id = comment.to_post_id
     liked_object = Like.objects.filter(to_comment_id=comment_id, user=request.user).first()
 
     if liked_object:
         liked_object.delete()
     else:
-        like = Like(to_comment_id=comment_id, user=request.user, to_post=None)  # Ensure to_post is explicitly set to None
+        like = Like(to_comment_id=comment_id, user=request.user)
         like.save()
 
-    return redirect(f"{request.META['HTTP_REFERER']}#comments-{comment_id}")
+    return redirect(f"{request.META['HTTP_REFERER']}#comments-{post_id}")
 
 
 @login_required

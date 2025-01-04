@@ -15,7 +15,7 @@
         </form>
 
         {% for comment in post.post_comments.all %}
-            <div class="comment">
+            <div id="comment-{{ comment.pk }}" class="comment">
                 <a class="user-link" href="{% url 'user-posts' comment.user.username %}">
                     <img src="{{ comment.user.user_profile.image.url }}" 
                          class="img-thumbnail rounded-circle comment-img"

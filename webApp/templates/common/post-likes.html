@@ -13,7 +13,7 @@
 <div id="likes-{{ post.pk }}" class="ml-5" style="display: none">
 {% for like in post.post_likes.all %}
     <div class="user-like">
-        <a href="{% url 'user-posts' post.author.username %}">{{ like.user.username }}</a>
+        <a href="{% url 'profile-view' user.username %}">{{ like.user.username }}</a>
     </div>
 {% endfor %}
 </div>
