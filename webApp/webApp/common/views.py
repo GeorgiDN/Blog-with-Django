@@ -9,18 +9,6 @@ from webApp.common.models import Like, Comment
 from django.shortcuts import redirect, get_object_or_404
 
 
-class BaseView(LoginRequiredMixin):
-    def get_user_liked_comments(self):
-        if self.request.user.is_authenticated:
-            return Like.objects.filter(user=self.request.user).values_list('to_comment_id', flat=True)
-        return []
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['user_liked_comments'] = self.get_user_liked_comments()
-        return context
-
-
 @login_required
 def likes_to_comment_functionality(request, comment_id: int):
     comment = get_object_or_404(Comment, pk=comment_id)
@@ -49,7 +37,7 @@ def likes_functionality(request, post_id: int):
     return redirect(request.META['HTTP_REFERER'] + f'#{post_id}')
 
 
-class CommentCreateView(BaseView, View):
+class CommentCreateView(LoginRequiredMixin, View):
     def post(self, request, post_id, *args, **kwargs):
         post = get_object_or_404(Post, pk=post_id)
         comment_form = CommentForm(request.POST)

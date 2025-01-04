@@ -24,9 +24,15 @@ class BaseView(LoginRequiredMixin):
             return Like.objects.filter(user=self.request.user).values_list('to_post_id', flat=True)
         return []
 
+    def get_user_liked_comments(self):
+        if self.request.user.is_authenticated:
+            return Like.objects.filter(user=self.request.user).values_list('to_comment_id', flat=True)
+        return []
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['user_liked_posts'] = self.get_user_liked_posts()
+        context['user_liked_comments'] = self.get_user_liked_comments()
         context["search_form"] = SearchForm(self.request.GET)
         return context
 
