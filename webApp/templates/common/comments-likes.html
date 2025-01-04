@@ -1,0 +1,19 @@
+<div class="post-item">
+    <a href="{% url 'like-comment' comment.pk %}" 
+       class="btn btn-sm rounded-pill {% if comment.pk in user_liked_comments %}btn-primary{% else %}btn-outline-secondary{% endif %}">
+        Like
+    </a>
+    <span>
+        <a href="#" onclick="toggleLikes('{{ comment.pk }}'); return false;">
+            {{ comment.comment_likes.count }} likes
+        </a>
+    </span>
+</div>
+
+<div id="likes-{{ comment.pk }}" class="ml-5" style="display: none">
+{% for like in comment.comment_likes.all %}
+    <div class="user-like">
+        <a href="{% url 'user-posts' post.author.username %}">{{ like.user.username }}</a>
+    </div>
+{% endfor %}
+</div>

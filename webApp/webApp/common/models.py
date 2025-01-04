@@ -1,5 +1,7 @@
 from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
 from django.db import models
+
 from webApp.blog.models import Post
 
 
@@ -8,6 +10,15 @@ class Like(models.Model):
         to=Post,
         on_delete=models.CASCADE,
         related_name='post_likes',
+        null=True,
+        blank=True,
+    )
+    to_comment = models.ForeignKey(
+        to="Comment",
+        on_delete=models.CASCADE,
+        related_name='comment_likes',
+        null=True,
+        blank=True,
     )
     user = models.ForeignKey(
         to=User,
@@ -18,8 +29,27 @@ class Like(models.Model):
         auto_now_add=True
     )
 
+    def clean(self):
+        if not self.to_post and not self.to_comment:
+            raise ValidationError("A like must be associated with either a post or a comment.")
+        if self.to_post and self.to_comment:
+            raise ValidationError("A like cannot be associated with both a post and a comment.")
+
+    def save(self, *args, **kwargs):
+        self.clean()  # Call validation before saving
+        super().save(*args, **kwargs)
+
     class Meta:
-        unique_together = ('to_post', 'user')
+        constraints = [
+            models.UniqueConstraint(
+                fields=['to_post', 'user'],
+                name='unique_like_to_post'
+            ),
+            models.UniqueConstraint(
+                fields=['to_comment', 'user'],
+                name='unique_like_to_comment'
+            )
+        ]
 
 
 class Comment(models.Model):

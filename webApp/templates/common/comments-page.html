@@ -24,6 +24,7 @@
                 <strong>{{ comment.user.username }}</strong>
                 <p>{{ comment.text }}</p>
                 <small>{{ comment.date_time_of_publication }}</small>
+                {% include 'common/comments-likes.html' %}
                 {% if comment.user == request.user %}
                      <div class="comments-btn-container">
                         <a href="{% url 'edit_comment' comment.pk %}" class="btn btn-info btn-sm">Edit</a>
