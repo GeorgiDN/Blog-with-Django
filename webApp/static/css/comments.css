@@ -2,7 +2,16 @@
     padding: 0.6rem;
     background-color: #eee;
     margin-top: 10px;
-    border-radius: 0.2rem
+    border-radius: 0.2rem;
+    max-width: 700px;
+    display: flex;
+    flex-direction: column;
+}
+
+.comment p {
+    max-width: 600px;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 }
 
 .comment .user-link {
@@ -19,10 +28,55 @@
     margin-right: 2px;
 }
 
-@media (max-width: 400px) {
+@media (max-width: 1200px) {
+    .comment {
+        max-width: 520px;
+    }
+
+    .comment-form textarea {
+        max-width: 520px;
+    }
+}
+
+@media (max-width: 1000px) {
+    .comment {
+        max-width: 390px;
+    }
+
+    .comment-form textarea {
+        max-width: 390px;
+    }
+}
+
+@media (max-width: 800px) {
+    .comment {
+        max-width: 300px;
+    }
+
+    .comment-form textarea {
+        max-width: 300px;
+    }
+}
+
+@media (min-width: 600px) and (max-width: 750px) {
+    .comment {
+        max-width: 450px;
+    }
+
+    .comment-form textarea {
+        max-width: 450px;
+    }
+}
+
+
+@media (max-width: 450px) {
     .comment {
         display: flex;
         flex-direction: column;
         align-items: center;
+    }
+
+    .comment p {
+        max-width: 240px;
     }
 }

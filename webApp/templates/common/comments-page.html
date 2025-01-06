@@ -6,7 +6,7 @@
         </a>
     </span>
 
-    <div id="comments-{{ post.pk }}" style="display: none;">
+    <div id="comments-{{ post.pk }}" style="display: none;" class="comment-form">
         <form id="comment-form-{{ post.pk }}" method="post" action="{% url 'comment' post.pk %}">
             {% csrf_token %}
             <textarea name="text" rows="2" cols="30" class="form-control"
