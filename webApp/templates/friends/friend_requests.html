@@ -1,0 +1,19 @@
+{% extends 'blog/base.html' %}
+{% block content %}
+    <h1>Friend Requests</h1>
+
+    {% if requests_received %}
+        <ul>
+            {% for friend_request in requests_received %}
+                <li>
+                    {{ friend_request.from_user.username }}
+                    <a href="{% url 'accept-friend-request' friend_request.id %}">Accept</a>
+                    <a href="{% url 'reject-friend-request' friend_request.id %}">Reject</a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No friend requests at the moment.</p>
+    {% endif %}
+
+{% endblock %}

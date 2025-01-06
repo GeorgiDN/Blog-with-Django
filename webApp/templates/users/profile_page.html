@@ -16,4 +16,8 @@
     <p><strong>Address:</strong> {{ profile.address }}</p>
     <p><strong>Company:</strong> {{ profile.company }}</p>
     <p><strong>School:</strong> {{ profile.school }}</p>
+    br
+    <a href="{% url 'send-friend-request' profile.user.id %}">Add Friend</a>
+    <a href="{% url 'friend-list' %}">Friends</a>
+
 {% endblock %}

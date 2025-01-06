@@ -46,9 +46,9 @@ INSTALLED_APPS = [
     'webApp.users.apps.UsersConfig',
     'webApp.common.apps.CommonConfig',
     'webApp.messaging.apps.MessagingConfig',
+    'webApp.friends.apps.FriendsConfig',
     'crispy_forms',
     'crispy_bootstrap4',
-
 ]
 
 MIDDLEWARE = [
