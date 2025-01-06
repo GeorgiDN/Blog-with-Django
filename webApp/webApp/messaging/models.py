@@ -14,7 +14,9 @@ class Message(models.Model):
         related_name='received_messages',
         on_delete=models.CASCADE
     )
-    content = models.TextField()
+    content = models.TextField(
+        max_length=1000,
+    )
     timestamp = models.DateTimeField(
         default=now
     )

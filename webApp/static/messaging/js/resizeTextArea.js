@@ -4,9 +4,9 @@ function resizeTextarea(textarea) {
 }
 
 const textarea = document.querySelector('textarea');
-const charCount = document.getElementById('char-count');
+const charCount = document.querySelector('.char-count');
 
 textarea.addEventListener('input', function () {
-    charCount.textContent = `${textarea.value.length}/500`;
+    charCount.textContent = `${textarea.value.length}/1000`;
     resizeTextarea(textarea);
 });

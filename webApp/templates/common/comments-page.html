@@ -9,15 +9,16 @@
     <div id="comments-{{ post.pk }}" style="display: none;" class="comment-form">
         <form id="comment-form-{{ post.pk }}" method="post" action="{% url 'comment' post.pk %}">
             {% csrf_token %}
-            <textarea name="text" rows="2" cols="30" class="form-control"
+            <textarea name="text" rows="2" cols="30" class="form-control" maxlength="1000"
                               placeholder="Add comment..."></textarea>
             <button type="submit" class="btn btn-primary btn-sm mt-2 comment-btn">Add Comment</button>
+            <small class="char-count">0/1000</small>
         </form>
 
         {% for comment in post.post_comments.all %}
             <div id="comment-{{ comment.pk }}" class="comment">
                 <a class="user-link" href="{% url 'user-posts' comment.user.username %}">
-                    <img src="{{ comment.user.user_profile.image.url }}" 
+                    <img src="{{ comment.user.user_profile.image.url }}"
                          class="img-thumbnail rounded-circle comment-img"
                          alt="profile-img">
                 </a>
