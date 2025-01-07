@@ -10,6 +10,9 @@
             </div>
         </div>
     </div>
+    <a href="{% url 'friend-list-user' user.id %}">My friends</a>
+    <br>
+    <a href="{% url 'friend-requests' %}">Friend Requests</a>
     <!-- FORM HERE -->
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
@@ -27,7 +30,5 @@
             <a class="btn btn-danger" href="{% url 'profile-delete' pk=request.user.user_profile.pk %}">Delete</a>
         </div>
     
-    <a href="{% url 'friend-list' %}">Friends</a>
-    <a href="{% url 'friend-requests' %}">Friend Requests</a>
     </form>
 {% endblock %}

@@ -8,6 +8,9 @@
     <p><strong>Start conversation with</strong>
         <a href="{% url 'conversation-detail' profile.user.username %}">{{ profile.user.username }}</a>
     </p>
+    <a href="{% url 'send-friend-request' profile.user.id %}">Sent friend request</a>
+    <br>
+    <a href="{% url 'friend-list-user' profile.user.id %}">{{ profile.user.username }}' friends</a>
     <p><strong>First Name:</strong> {{ profile.first_name }}</p>
     <p><strong>Last Name:</strong> {{ profile.last_name }}</p>
     <p><strong>Phone:</strong> {{ profile.phone }}</p>
@@ -16,8 +19,5 @@
     <p><strong>Address:</strong> {{ profile.address }}</p>
     <p><strong>Company:</strong> {{ profile.company }}</p>
     <p><strong>School:</strong> {{ profile.school }}</p>
-    br
-    <a href="{% url 'send-friend-request' profile.user.id %}">Add Friend</a>
-    <a href="{% url 'friend-list' %}">Friends</a>
-
+    
 {% endblock %}
