@@ -2,15 +2,24 @@
 {% block content %}
     <h1>{{ profile.user.username }}'s Profile</h1>
     <img src="{{ profile.image.url }}" alt="{{ profile.user.username }}'s profile picture" width="150">
-    <h4><strong>
-        <a class="mr-2" href="{% url 'user-posts' profile.user.username %}">Posts by {{ profile.user.username }}</a>
-    </strong></h4>
-    <p><strong>Start conversation with</strong>
-        <a href="{% url 'conversation-detail' profile.user.username %}">{{ profile.user.username }}</a>
-    </p>
-    <a href="{% url 'send-friend-request' profile.user.id %}">Sent friend request</a>
-    <br>
-    <a href="{% url 'friend-list-user' profile.user.id %}">{{ profile.user.username }}' friends</a>
+    
+        <a href="{% url 'user-posts' profile.user.username %}">
+            <h4>Posts</h4>
+        </a>
+    
+        <a href="{% url 'conversation-detail' profile.user.username %}">
+            <h4>Send message</h4>
+        </a>
+    <div class="friends-section">
+        <a href="{% url 'send-friend-request' profile.user.id %}">
+            <h4>Sent friend request</h4>
+        </a>
+    
+        <a class="text-info" href="{% url 'friend-list-user' profile.user.id %}">
+            <h4>Friends</h4>
+        </a>
+    
+    </div>
     <p><strong>First Name:</strong> {{ profile.first_name }}</p>
     <p><strong>Last Name:</strong> {{ profile.last_name }}</p>
     <p><strong>Phone:</strong> {{ profile.phone }}</p>
@@ -19,5 +28,5 @@
     <p><strong>Address:</strong> {{ profile.address }}</p>
     <p><strong>Company:</strong> {{ profile.company }}</p>
     <p><strong>School:</strong> {{ profile.school }}</p>
-    
+
 {% endblock %}

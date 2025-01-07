@@ -5,8 +5,12 @@
     {% if friends %}
     <ul>
         {% for friend in friends %}
-            <li>
+            <li class="list-group-item">
+                <a class="text-dark" href="{% url 'profile-view' friend.username %}">
+                 <img class="rounded-circle article-img profile-img" src="{{ friend.user_profile.image.url }}" alt="{{ user.username }}'s profile picture">
                 {{ friend.username }}
+                </a>
+
             </li>
         {% endfor %}
     </ul>

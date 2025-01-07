@@ -10,9 +10,14 @@
             </div>
         </div>
     </div>
-    <a href="{% url 'friend-list-user' user.id %}">My friends</a>
-    <br>
-    <a href="{% url 'friend-requests' %}">Friend Requests</a>
+    <div class="friends-section">
+        <h4>
+            <a class="text-info" href="{% url 'friend-list-user' user.id %}">My friends</a>
+        </h4>
+        <h4>
+            <a class="text-info" href="{% url 'friend-requests' %}">Friend Requests</a>
+        </h4>
+    </div>
     <!-- FORM HERE -->
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
@@ -29,6 +34,6 @@
             <button class="btn btn-outline-info" type="submit">Update</button>
             <a class="btn btn-danger" href="{% url 'profile-delete' pk=request.user.user_profile.pk %}">Delete</a>
         </div>
-    
+
     </form>
 {% endblock %}
