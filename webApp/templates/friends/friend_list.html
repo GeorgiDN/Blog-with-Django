@@ -12,9 +12,9 @@
                         {{ friend.username }}
                     </a>
                     {% if user.id == request.user.id %}
-                        <a href="{% url 'remove-friend' friend.id %}" class="btn btn-danger">Remove friend</a>
+                        <a href="{% url 'remove-friend' friend.id %}" class="btn btn-danger btn-sm ml-2">Remove</a>
                     {% endif %}
-                
+
                 </li>
             {% endfor %}
         </ul>

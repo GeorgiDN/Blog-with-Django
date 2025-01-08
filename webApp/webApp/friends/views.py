@@ -1,6 +1,10 @@
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.views import View
+from django.views.generic import ListView
+
 from .models import Friendship, FriendRequest
 from django.contrib.auth.models import User
 
@@ -76,31 +80,66 @@ def friend_list(request, user_id):
     return render(request, 'friends/friend_list.html', context)
 
 
-@login_required
-def friend_requests(request):
-    requests_received = FriendRequest.objects.filter(to_user=request.user)
+class FriendRequestListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
+    model = FriendRequest
+    template_name = 'friends/friend_requests.html'
+    context_object_name = 'requests_received'
 
-    context = {
-        'requests_received': requests_received
-    }
+    def get_queryset(self):
+        return FriendRequest.objects.filter(to_user=self.request.user)
 
-    return render(request, 'friends/friend_requests.html', context)
+    def test_func(self):
+        return self.request.user.is_authenticated
 
 
-@login_required
-def remove_friend(request, user_id):
-    user = request.user
-    user_friend = get_object_or_404(User, id=user_id)
+class RemoveFriendView(LoginRequiredMixin, UserPassesTestMixin, View):
 
-    if request.method == 'POST' and user_friend in request.user.friendship.friends.all():
-        user.friendship.friends.remove(user_friend)
-        user_friend.friendship.friends.remove(user)
+    def get_object(self):
+        return get_object_or_404(User, id=self.kwargs['user_id'])
+
+    def test_func(self):
+        user_friend = self.get_object()
+        return user_friend in self.request.user.friendship.friends.all()
+
+    def get(self, request, *args, **kwargs):
+        user_friend = self.get_object()
+        context = {'user_friend': user_friend}
+        return render(request, 'friends/remove_friend.html', context)
+
+    def post(self, request, *args, **kwargs):
+        user_friend = self.get_object()
+        request.user.friendship.friends.remove(user_friend)
+        user_friend.friendship.friends.remove(request.user)
         messages.success(request, f'{user_friend.username} is removed from your friends.')
-        return redirect('friend-list-user', user_id=user.id)
+        return redirect('friend-list-user', user_id=request.user.id)
 
-    context = {
-        'user_friend': user_friend,
-        'user': user,
-    }
 
-    return render(request, 'friends/remove_friend.html', context)
+
+# @login_required
+# def friend_requests(request):
+#     requests_received = FriendRequest.objects.filter(to_user=request.user)
+#
+#     context = {
+#         'requests_received': requests_received
+#     }
+#
+#     return render(request, 'friends/friend_requests.html', context)
+
+
+# @login_required
+# def remove_friend(request, user_id):
+#     user = request.user
+#     user_friend = get_object_or_404(User, id=user_id)
+#
+#     if request.method == 'POST' and user_friend in request.user.friendship.friends.all():
+#         user.friendship.friends.remove(user_friend)
+#         user_friend.friendship.friends.remove(user)
+#         messages.success(request, f'{user_friend.username} is removed from your friends.')
+#         return redirect('friend-list-user', user_id=user.id)
+#
+#     context = {
+#         'user_friend': user_friend,
+#         'user': user,
+#     }
+#
+#     return render(request, 'friends/remove_friend.html', context)
