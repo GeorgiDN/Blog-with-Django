@@ -66,18 +66,22 @@ def reject_friend_request(request, request_id):
     return redirect('friend-requests')
 
 
-@login_required
-def friend_list(request, user_id):
-    user = get_object_or_404(User, id=user_id)
-    friendship, created = Friendship.objects.get_or_create(user=user)
-    friends = friendship.friends.all()
+class FriendListView(LoginRequiredMixin, ListView):
+    model = Friendship
+    template_name = 'friends/friend_list.html'
 
-    context = {
-        'friends': friends,
-        'user': user,
-    }
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
 
-    return render(request, 'friends/friend_list.html', context)
+        user_id = self.kwargs['user_id']
+        user = get_object_or_404(User, id=user_id)
+
+        friendship, created = Friendship.objects.get_or_create(user=user)
+        friends = friendship.friends.all()
+
+        context['friends'] = friends
+        context['user'] = user
+        return context
 
 
 class FriendRequestListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
@@ -113,6 +117,19 @@ class RemoveFriendView(LoginRequiredMixin, UserPassesTestMixin, View):
         messages.success(request, f'{user_friend.username} is removed from your friends.')
         return redirect('friend-list-user', user_id=request.user.id)
 
+
+# @login_required
+# def friend_list(request, user_id):
+#     user = get_object_or_404(User, id=user_id)
+#     friendship, created = Friendship.objects.get_or_create(user=user)
+#     friends = friendship.friends.all()
+#
+#     context = {
+#         'friends': friends,
+#         'user': user,
+#     }
+#
+#     return render(request, 'friends/friend_list.html', context)
 
 
 # @login_required
