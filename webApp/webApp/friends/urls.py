@@ -9,6 +9,7 @@ urlpatterns = [
     path('reject-request/<int:request_id>/', views.reject_friend_request, name='reject-friend-request'),
     path('friends/<int:user_id>/', views.friend_list, name='friend-list-user'),
     path('requests/', views.friend_requests, name='friend-requests'),
+    path('remove/<int:user_id>/', views.remove_friend, name='remove-friend'),
 ]
 
 if settings.DEBUG:

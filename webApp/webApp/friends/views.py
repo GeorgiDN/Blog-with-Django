@@ -4,12 +4,6 @@ from django.contrib.auth.decorators import login_required
 from .models import Friendship, FriendRequest
 from django.contrib.auth.models import User
 
-from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib import messages
-from django.contrib.auth.decorators import login_required
-from .models import Friendship, FriendRequest
-from django.contrib.auth.models import User
-
 
 @login_required
 def send_friend_request(request, user_id):
@@ -69,15 +63,14 @@ def reject_friend_request(request, request_id):
 
 
 @login_required
-def friend_list(request, user_id=None):
-    target_user = get_object_or_404(User, id=user_id) if user_id else request.user
-
-    friendship, created = Friendship.objects.get_or_create(user=target_user)
+def friend_list(request, user_id):
+    user = get_object_or_404(User, id=user_id)
+    friendship, created = Friendship.objects.get_or_create(user=user)
     friends = friendship.friends.all()
 
     context = {
         'friends': friends,
-        'target_user': target_user,  # Pass the target user to the template
+        'user': user,
     }
 
     return render(request, 'friends/friend_list.html', context)
@@ -92,3 +85,22 @@ def friend_requests(request):
     }
 
     return render(request, 'friends/friend_requests.html', context)
+
+
+@login_required
+def remove_friend(request, user_id):
+    user = request.user
+    user_friend = get_object_or_404(User, id=user_id)
+
+    if request.method == 'POST' and user_friend in request.user.friendship.friends.all():
+        user.friendship.friends.remove(user_friend)
+        user_friend.friendship.friends.remove(user)
+        messages.success(request, f'{user_friend.username} is removed from your friends.')
+        return redirect('friend-list-user', user_id=user.id)
+
+    context = {
+        'user_friend': user_friend,
+        'user': user,
+    }
+
+    return render(request, 'friends/remove_friend.html', context)

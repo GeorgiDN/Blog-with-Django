@@ -1,19 +1,23 @@
 {% extends 'blog/base.html' %}
 
 {% block content %}
-    <h1>{{ target_user.username }}'s Friends</h1>
+    <h1>{{ user.username }}'s Friends</h1>
     {% if friends %}
-    <ul>
-        {% for friend in friends %}
-            <li class="list-group-item">
-                <a class="text-dark" href="{% url 'profile-view' friend.username %}">
-                 <img class="rounded-circle article-img profile-img" src="{{ friend.user_profile.image.url }}" alt="{{ user.username }}'s profile picture">
-                {{ friend.username }}
-                </a>
-
-            </li>
-        {% endfor %}
-    </ul>
+        <ul>
+            {% for friend in friends %}
+                <li class="list-group-item">
+                    <a class="text-dark" href="{% url 'profile-view' friend.username %}">
+                        <img class="rounded-circle article-img profile-img" src="{{ friend.user_profile.image.url }}"
+                             alt="{{ user.username }}'s profile picture">
+                        {{ friend.username }}
+                    </a>
+                    {% if user.id == request.user.id %}
+                        <a href="{% url 'remove-friend' friend.id %}" class="btn btn-danger">Remove friend</a>
+                    {% endif %}
+                
+                </li>
+            {% endfor %}
+        </ul>
     {% else %}
         <h3>{{ target_user.username }} has no added friends yet.</h3>
     {% endif %}
