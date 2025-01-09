@@ -1,14 +1,22 @@
-{% extends 'blog/base.html' %}
+{% extends 'blog/base.html' %} 
 {% block content %}
     <h1>Friend Requests</h1>
-
+    
     {% if requests_received %}
         <ul>
             {% for friend_request in requests_received %}
                 <li>
                     {{ friend_request.from_user.username }}
-                    <a href="{% url 'accept-friend-request' friend_request.id %}">Accept</a>
-                    <a href="{% url 'reject-friend-request' friend_request.id %}">Reject</a>
+                    
+                    <form method="post" action="{% url 'accept-friend-request' friend_request.id %}" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-primary btn-sm">Accept</button>
+                    </form>
+                    
+                    <form method="post" action="{% url 'reject-friend-request' friend_request.id %}" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger btn-sm">Reject</button>
+                    </form>
                 </li>
             {% endfor %}
         </ul>

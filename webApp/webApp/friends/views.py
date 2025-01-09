@@ -34,24 +34,35 @@ def send_friend_request(request, user_id):
     return redirect('profile-view', username=to_user.username)
 
 
-@login_required
-def accept_friend_request(request, request_id):
-    friend_request = get_object_or_404(FriendRequest, id=request_id, to_user=request.user)
-    from_user = friend_request.from_user
-    to_user = friend_request.to_user
+class AcceptFriendRequestView(LoginRequiredMixin, SuccessMessageMixin, View):
+    model = FriendRequest
+    success_url = reverse_lazy('friend-requests')
 
-    if not hasattr(from_user, 'friendship'):
-        Friendship.objects.create(user=from_user)
-    if not hasattr(to_user, 'friendship'):
-        Friendship.objects.create(user=to_user)
+    def get_object(self, **kwargs):
+        obj = get_object_or_404(
+            FriendRequest,
+            id=self.kwargs['request_id'],
+            to_user=self.request.user
+        )
+        return obj
 
-    to_user.friendship.friends.add(from_user)
-    from_user.friendship.friends.add(to_user)
+    def post(self, request, *args, **kwargs):
+        friend_request = self.get_object()
+        from_user = friend_request.from_user
+        to_user = friend_request.to_user
 
-    messages.success(request, f'User {from_user.username} is added as a friend.')
-    friend_request.delete()
+        if not hasattr(from_user, 'friendship'):
+            Friendship.objects.create(user=from_user)
+        if not hasattr(to_user, 'friendship'):
+            Friendship.objects.create(user=to_user)
 
-    return redirect('friend-requests')
+        to_user.friendship.friends.add(from_user)
+        from_user.friendship.friends.add(to_user)
+
+        messages.success(self.request, f'User {from_user.username} is added as a friend.')
+        friend_request.delete()
+
+        return redirect(self.success_url)
 
 
 class RejectFriendRequestView(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
@@ -71,8 +82,8 @@ class RejectFriendRequestView(LoginRequiredMixin, SuccessMessageMixin, DeleteVie
         return self.post(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
-        obj = self.get_object()
-        obj.delete()
+        friend_request = self.get_object()
+        friend_request.delete()
         messages.success(self.request, self.success_message)
         return redirect(self.success_url)
 
@@ -136,6 +147,26 @@ class RemoveFriendView(LoginRequiredMixin, UserPassesTestMixin, View):
 
 
 # FBV
+# @login_required
+# def accept_friend_request(request, request_id):
+#     friend_request = get_object_or_404(FriendRequest, id=request_id, to_user=request.user)
+#     from_user = friend_request.from_user
+#     to_user = friend_request.to_user
+#
+#     if not hasattr(from_user, 'friendship'):
+#         Friendship.objects.create(user=from_user)
+#     if not hasattr(to_user, 'friendship'):
+#         Friendship.objects.create(user=to_user)
+#
+#     to_user.friendship.friends.add(from_user)
+#     from_user.friendship.friends.add(to_user)
+#
+#     messages.success(request, f'User {from_user.username} is added as a friend.')
+#     friend_request.delete()
+#
+#     return redirect('friend-requests')
+
+
 # @login_required
 # def reject_friend_request(request, request_id):
 #     friend_request = get_object_or_404(
