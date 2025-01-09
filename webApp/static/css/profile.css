@@ -19,11 +19,33 @@
     gap: 0.3rem;
 }
 
-a h5 {
+.user-links a h5 {
     color: #17a2b8;
 }
 
-a h5:hover {
+.user-links a h5:hover {
     text-decoration: underline;
 }
 
+.user-links .friends-section form button {
+    border: none;
+    background-color: #fafafa;
+    padding: 0;
+    outline: none;
+}
+
+.friends-section {
+    display: flex;
+    flex-direction: column;
+}
+
+.friends-section .sent-request-btn {
+    font-weight: 600;
+    font-size: 18px;
+    margin-bottom: 0.3rem;
+}
+
+.friends-section .sent-request-btn:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}

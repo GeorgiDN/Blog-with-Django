@@ -10,28 +10,38 @@ from .models import Friendship, FriendRequest
 from django.contrib.auth.models import User
 
 
-@login_required
-def send_friend_request(request, user_id):
-    to_user = get_object_or_404(User, id=user_id)
+class SendFriendRequestView(LoginRequiredMixin, View):
+    model = FriendRequest
 
-    if request.user == to_user:
-        messages.error(request, "You cannot send a friend request to yourself.")
+    def get_object(self, **kwargs):
+        obj = get_object_or_404(
+            User,
+            id=self.kwargs['user_id'],
+        )
+        return obj
+
+    def post(self, request, *args, **kwargs):
+        to_user = self.get_object()
+
+        if request.user == to_user:
+            messages.error(request, "You cannot send a friend request to yourself.")
+            return redirect('profile-view', username=to_user.username)
+
+        if Friendship.objects.filter(user=request.user, friends=to_user).exists():
+            messages.info(request, f'You are already friends with {to_user.username}.')
+            return redirect('profile-view', username=to_user.username)
+
+        friend_request, created = FriendRequest.objects.get_or_create(
+            from_user=request.user,
+            to_user=to_user,
+        )
+
+        if created:
+            messages.success(request, f'Friend request sent to {to_user.username}.')
+        else:
+            messages.info(request, f'You have already sent a friend request to {to_user.username}.')
+
         return redirect('profile-view', username=to_user.username)
-
-    if Friendship.objects.filter(user=request.user, friends=to_user).exists():
-        messages.info(request, f'You are already friends with {to_user.username}.')
-        return redirect('profile-view', username=to_user.username)
-
-    friend_request, created = FriendRequest.objects.get_or_create(
-        from_user=request.user, to_user=to_user
-    )
-
-    if created:
-        messages.success(request, f'Friend request sent to {to_user.username}.')
-    else:
-        messages.info(request, f'You have already sent a friend request to {to_user.username}.')
-
-    return redirect('profile-view', username=to_user.username)
 
 
 class AcceptFriendRequestView(LoginRequiredMixin, SuccessMessageMixin, View):
@@ -145,8 +155,31 @@ class RemoveFriendView(LoginRequiredMixin, UserPassesTestMixin, View):
         messages.success(request, f'{user_friend.username} is removed from your friends.')
         return redirect('friend-list-user', user_id=request.user.id)
 
-
 # FBV
+# @login_required
+# def send_friend_request(request, user_id):
+#     to_user = get_object_or_404(User, id=user_id)
+#
+#     if request.user == to_user:
+#         messages.error(request, "You cannot send a friend request to yourself.")
+#         return redirect('profile-view', username=to_user.username)
+#
+#     if Friendship.objects.filter(user=request.user, friends=to_user).exists():
+#         messages.info(request, f'You are already friends with {to_user.username}.')
+#         return redirect('profile-view', username=to_user.username)
+#
+#     friend_request, created = FriendRequest.objects.get_or_create(
+#         from_user=request.user, to_user=to_user
+#     )
+#
+#     if created:
+#         messages.success(request, f'Friend request sent to {to_user.username}.')
+#     else:
+#         messages.info(request, f'You have already sent a friend request to {to_user.username}.')
+#
+#     return redirect('profile-view', username=to_user.username)
+
+
 # @login_required
 # def accept_friend_request(request, request_id):
 #     friend_request = get_object_or_404(FriendRequest, id=request_id, to_user=request.user)
@@ -222,5 +255,3 @@ class RemoveFriendView(LoginRequiredMixin, UserPassesTestMixin, View):
 #     }
 #
 #     return render(request, 'friends/remove_friend.html', context)
-
-

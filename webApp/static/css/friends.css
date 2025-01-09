@@ -1,14 +1,3 @@
-.friends-section {
-    display: flex;
-    flex-direction: column;
-}
-
-
-.friends-section .sent-request-btn {
-    font-weight: 500;
-    font-size: 18px;
-}
-
 .friend-request li {
     list-style-type: none;
 }

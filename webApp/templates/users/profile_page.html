@@ -14,15 +14,18 @@
                 <i class="fa-solid fa-envelope"></i>
             </a>
             <div class="friends-section">
-                <a class="text-info" href="{% url 'send-friend-request' profile.user.id %}">
-                    <h5>Sent friend request</h5>
-                    <i class="fa-solid fa-user-plus"></i>
-                </a>
-    
                 <a class="text-info" href="{% url 'friend-list-user' profile.user.id %}">
                     <h5>Friends</h5>
                     <i class="fa-solid fa-user-group"></i>
                 </a>
+                
+                <form method="post" action="{% url 'send-friend-request' profile.user.id %}">
+                    {% csrf_token %}
+                    <button type="submit" class="text-info sent-request-btn">
+                        Send friend request
+                        <i class="fa-solid fa-user-plus"></i>
+                    </button>
+                </form>
     
             </div>
         </div>
