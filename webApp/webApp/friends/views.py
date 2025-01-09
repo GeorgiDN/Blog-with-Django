@@ -1,10 +1,11 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib.messages.views import SuccessMessageMixin
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.views import View
-from django.views.generic import ListView
-
+from django.views.generic import ListView, DeleteView
+from django.urls import reverse_lazy
 from .models import Friendship, FriendRequest
 from django.contrib.auth.models import User
 
@@ -53,17 +54,27 @@ def accept_friend_request(request, request_id):
     return redirect('friend-requests')
 
 
-@login_required
-def reject_friend_request(request, request_id):
-    friend_request = get_object_or_404(
-        FriendRequest,
-        id=request_id,
-        to_user=request.user
-    )
+class RejectFriendRequestView(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
+    model = FriendRequest
+    success_url = reverse_lazy('friend-requests')
+    success_message = 'You rejected the friend request'
 
-    messages.success(request, f'You rejected the friend request')
-    friend_request.delete()
-    return redirect('friend-requests')
+    def get_object(self, **kwargs):
+        obj = get_object_or_404(
+            FriendRequest,
+            id=self.kwargs['request_id'],
+            to_user=self.request.user
+        )
+        return obj
+
+    def get(self, request, *args, **kwargs):
+        return self.post(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        obj = self.get_object()
+        obj.delete()
+        messages.success(self.request, self.success_message)
+        return redirect(self.success_url)
 
 
 class FriendListView(LoginRequiredMixin, ListView):
@@ -92,6 +103,12 @@ class FriendRequestListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
     def get_queryset(self):
         return FriendRequest.objects.filter(to_user=self.request.user)
 
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     requests_received = FriendRequest.objects.filter(to_user=self.request.user)
+    #     context["requests_received"] = requests_received
+    #     return context
+
     def test_func(self):
         return self.request.user.is_authenticated
 
@@ -116,6 +133,20 @@ class RemoveFriendView(LoginRequiredMixin, UserPassesTestMixin, View):
         user_friend.friendship.friends.remove(request.user)
         messages.success(request, f'{user_friend.username} is removed from your friends.')
         return redirect('friend-list-user', user_id=request.user.id)
+
+
+# FBV
+# @login_required
+# def reject_friend_request(request, request_id):
+#     friend_request = get_object_or_404(
+#         FriendRequest,
+#         id=request_id,
+#         to_user=request.user
+#     )
+#
+#     messages.success(request, 'You rejected the friend request')
+#     friend_request.delete()
+#     return redirect('friend-requests')
 
 
 # @login_required
@@ -160,3 +191,5 @@ class RemoveFriendView(LoginRequiredMixin, UserPassesTestMixin, View):
 #     }
 #
 #     return render(request, 'friends/remove_friend.html', context)
+
+
