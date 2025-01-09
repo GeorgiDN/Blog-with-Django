@@ -8,3 +8,11 @@
     font-weight: 500;
     font-size: 18px;
 }
+
+.friend-request li {
+    list-style-type: none;
+}
+
+.friend-request form {
+    margin-left: 0.4rem;
+}
