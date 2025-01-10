@@ -1,21 +1,11 @@
-from django.shortcuts import render, get_object_or_404
-from django.http import HttpResponse
+from django.shortcuts import get_object_or_404
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, TemplateView
 from django.contrib.auth.models import User
 from webApp.blog.models import Post
 from webApp.common.models import Like
 from webApp.common.forms import CommentForm, SearchForm
-
-
-def home(request):
-    posts = Post.objects.all()
-
-    context = {
-        'posts': posts
-    }
-
-    return render(request, 'blog/home.html', context)
+from django.db.models import Q
 
 
 class BaseView(LoginRequiredMixin):
@@ -38,10 +28,14 @@ class BaseView(LoginRequiredMixin):
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        post_title = self.request.GET.get('post_title')
+        search_term = self.request.GET.get('search_term')
 
-        if post_title:
-            queryset = queryset.filter(title__icontains=post_title)
+        if search_term:
+            queryset = queryset.filter(
+                Q(title__icontains=search_term) |
+                Q(content__icontains=search_term) |
+                Q(author__username__icontains=search_term)
+            )
 
         return queryset
 

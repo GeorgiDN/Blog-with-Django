@@ -29,14 +29,14 @@ class CommentEditForm(forms.ModelForm):
 
 
 class SearchForm(forms.Form):
-    post_title = forms.CharField(
+    search_term = forms.CharField(
         required=False,
         widget=forms.TextInput(
-            attrs={'placeholder': 'Search by Post title...',
+            attrs={'placeholder': 'Search',
                    'class': 'form-control'}
         )
     )
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['post_title'].label = ''
+        self.fields['search_term'].label = ''
