@@ -16,6 +16,9 @@
         </h5>
         <h5>
             <a class="text-info" href="{% url 'friend-requests' %}">Friend Requests</a>
+            {% if requests_count > 0 %}
+                <span class="badge badge-danger">{{ requests_count }}</span>
+            {% endif %}
         </h5>
     </div>
     <!-- FORM HERE -->

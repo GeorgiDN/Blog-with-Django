@@ -1,5 +1,6 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.messages.views import SuccessMessageMixin
+from django.db.models import Count
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -123,12 +124,6 @@ class FriendRequestListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
 
     def get_queryset(self):
         return FriendRequest.objects.filter(to_user=self.request.user)
-
-    # def get_context_data(self, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #     requests_received = FriendRequest.objects.filter(to_user=self.request.user)
-    #     context["requests_received"] = requests_received
-    #     return context
 
     def test_func(self):
         return self.request.user.is_authenticated

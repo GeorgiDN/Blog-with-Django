@@ -6,6 +6,7 @@ from django.views.generic import CreateView, View, DeleteView, DetailView
 from django.contrib.auth.models import User
 from django.urls import reverse_lazy
 
+from webApp.friends.models import FriendRequest
 from webApp.users.forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm
 from django.contrib.auth.decorators import login_required
 
@@ -31,9 +32,12 @@ class ProfileView(LoginRequiredMixin, View):
         u_form = UserUpdateForm(instance=request.user)
         p_form = ProfileUpdateForm(instance=request.user.user_profile)
 
+        requests_count = FriendRequest.objects.filter(to_user=self.request.user).count()
+
         context = {
             'u_form': u_form,
-            'p_form': p_form
+            'p_form': p_form,
+            'requests_count': requests_count
         }
 
         return render(request, 'users/profile.html', context)
@@ -98,7 +102,6 @@ class ProfileDetailView(DetailView):
     def get_object(self, **kwargs):
         username = self.kwargs.get('username')
         return get_object_or_404(Profile, user__username=username)
-
 
 
 
