@@ -39,6 +39,9 @@ class Like(models.Model):
         self.clean()  # Call validation before saving
         super().save(*args, **kwargs)
 
+    def __str__(self):
+        return f"Like"
+
     class Meta:
         constraints = [
             models.UniqueConstraint(
@@ -70,6 +73,9 @@ class Comment(models.Model):
         on_delete=models.CASCADE,
         related_name='user_comments',
     )
+
+    def __str__(self):
+        return f'{self.user} comment: {self.to_post}'
 
     class Meta:
         ordering = ['-date_time_of_publication']
