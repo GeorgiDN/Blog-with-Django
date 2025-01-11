@@ -53,7 +53,9 @@
   ```
 
 Description
-A blogging platform that allows users to create, read, update, and delete posts. Users can interact with posts through likes and comments, and personalize their experience with profile pictures. The application also includes features such as password reset via email.
+A blogging platform that allows users to create, read, update, and delete posts. 
+Users can interact with posts through likes and comments, and personalize their experience with profile pictures. 
+The application also includes features such as password reset via email, sending messages, adding friends
 
 ## Features
 ### Posts
@@ -63,17 +65,27 @@ A blogging platform that allows users to create, read, update, and delete posts.
 - View all posts in a structured feed.
 
 ### Comments:
-- Add, edit, and delete comments on any post.
+- Add, edit, delete and like comments on any post.
 - Comments are tied to user accounts.
-- 
+
 ### Likes:
-- Like or unlike posts to show appreciation.
-- View the total number of likes on a post and users who liked the post.
+- Like or unlike posts and comments.
+- View the total number of likes on a post or and comment and users who liked.
 
 ### User Profiles
 - Profile pictures for users.
 - View user-specific content.
-- 
+
 ### Authentication
 - User registration and login.
 - Password reset functionality with email.
+
+### Friends
+- Users can send friend request
+- Accept or reject friend request
+- Accept or reject friend request
+- Friend's list
+
+### Messages
+- Users can send messages each other
+- Upload file, edit and remove message 
