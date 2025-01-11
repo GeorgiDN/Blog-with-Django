@@ -6,8 +6,9 @@ from webApp.blog.models import Post
 from webApp.common.models import Like
 from webApp.common.forms import CommentForm, SearchForm
 from django.db.models import Q
-from django.core.mail import send_mail, EmailMessage
-from django.conf import settings
+from .tasks import send_email_to_users
+# from django.core.mail import send_mail, EmailMessage
+# from django.conf import settings
 
 
 class BaseView(LoginRequiredMixin):
@@ -71,22 +72,11 @@ class PostCreateView(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         form.instance.author = self.request.user
-        # return super().form_valid(form)
         response = super().form_valid(form)
 
-        recipient_emails = User.objects.exclude(id=self.request.user.id).values_list('email', flat=True)
+        # send email using celery and redis
+        send_email_to_users.delay(form.instance.title, form.instance.content, self.request.user.username)
 
-        if recipient_emails:
-            subject = f'New post Created {form.instance.title}'
-            message = (f"Hello,\n\nA new post titled '{form.instance.title}' has been created "
-                       f"by {self.request.user.username}. Check it out!")
-            email = EmailMessage(
-                subject=subject,
-                body=message,
-                from_email=settings.EMAIL_HOST_USER ,
-                bcc=recipient_emails,
-            )
-            email.send(fail_silently=False)
         return response
 
 
