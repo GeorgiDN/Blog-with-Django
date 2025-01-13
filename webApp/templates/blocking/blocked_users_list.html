@@ -1,0 +1,26 @@
+{% extends 'blog/base.html' %}
+{% block content %}
+    <div class="blocked-users">
+        <h1>Blocked users</h1>
+
+        {% if blocked_users %}
+            <ul>
+                {% for user in blocked_users %}
+                    <li class="list-group-item">
+                        <img class="rounded-circle article-img profile-img"
+                             src="{{ user.blocked.user_profile.image.url }}"
+                             alt="{{ user.blocked.username }}'s profile picture">
+                        {{ user.blocked.username }}
+                        
+                        <form method="post" action="{% url 'unblock-user' user.blocked.id %}" style="display:inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-info btn-sm mb-1 ml-2">
+                                UNBLOCK
+                            </button>
+                        </form>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </div>
+{% endblock %}

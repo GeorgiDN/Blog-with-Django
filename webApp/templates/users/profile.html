@@ -21,6 +21,11 @@
             {% endif %}
         </h5>
     </div>
+    <div class="blocked-users_section">
+        <h5>
+            <a class="text-info" href="{% url 'blocked-users-list' user.id %}">Blocked Users</a>
+        </h5>
+    </div>
     <!-- FORM HERE -->
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
