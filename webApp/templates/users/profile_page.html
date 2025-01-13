@@ -19,14 +19,22 @@
                     <i class="fa-solid fa-user-group"></i>
                 </a>
                 
-                <form method="post" action="{% url 'send-friend-request' profile.user.id %}">
-                    {% csrf_token %}
-                    <button type="submit" class="text-info sent-request-btn">
-                        Send friend request
-                        <i class="fa-solid fa-user-plus"></i>
-                    </button>
-                </form>
-    
+                {% if not my_profile_page %}
+                    <form method="post" action="{% url 'send-friend-request' profile.user.id %}">
+                        {% csrf_token %}
+                        {% if is_send_request %}
+                            <button type="submit" class="text-info sent-request-btn disabled" disabled>
+                                Request is sent
+                                <i class="fa-solid fa-user-plus"></i>
+                            </button>
+                        {% elif not is_friend %}
+                            <button type="submit" class="text-info sent-request-btn">
+                                Send friend request
+                                <i class="fa-solid fa-user-plus"></i>
+                            </button>
+                        {% endif %}
+                    </form>
+                {% endif %}
             </div>
         </div>
         <p><strong>First Name:</strong> {{ profile.first_name }}</p>

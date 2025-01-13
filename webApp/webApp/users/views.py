@@ -6,7 +6,7 @@ from django.views.generic import CreateView, View, DeleteView, DetailView
 from django.contrib.auth.models import User
 from django.urls import reverse_lazy
 
-from webApp.friends.models import FriendRequest
+from webApp.friends.models import FriendRequest, Friendship
 from webApp.users.forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm
 from django.contrib.auth.decorators import login_required
 
@@ -28,6 +28,7 @@ class AppUserRegisterView(CreateView):
 
 
 class ProfileView(LoginRequiredMixin, View):
+
     def get(self, request, *args, **kwargs):
         u_form = UserUpdateForm(instance=request.user)
         p_form = ProfileUpdateForm(instance=request.user.user_profile)
@@ -37,7 +38,7 @@ class ProfileView(LoginRequiredMixin, View):
         context = {
             'u_form': u_form,
             'p_form': p_form,
-            'requests_count': requests_count
+            'requests_count': requests_count,
         }
 
         return render(request, 'users/profile.html', context)
@@ -94,7 +95,7 @@ class ConfirmRemoveImageView(LoginRequiredMixin, View):
         return redirect('profile')
 
 
-class ProfileDetailView(DetailView):
+class ProfileDetailView(LoginRequiredMixin, DetailView):
     model = Profile
     template_name = 'users/profile_page.html'
     context_object_name = 'profile'
@@ -103,7 +104,20 @@ class ProfileDetailView(DetailView):
         username = self.kwargs.get('username')
         return get_object_or_404(Profile, user__username=username)
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
 
+        current_user = self.request.user
+        username = self.kwargs.get('username')
+        to_user = get_object_or_404(User, username=username)
+        is_friend = Friendship.objects.filter(user=current_user, friends=to_user).exists()
+        is_send_request = FriendRequest.objects.filter(from_user=current_user, to_user=to_user).exists()
+        my_profile_page = current_user == to_user
+
+        context['is_friend'] = is_friend
+        context['is_send_request'] = is_send_request
+        context['my_profile_page'] = my_profile_page
+        return context
 
 
 # FBV

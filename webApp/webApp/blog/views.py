@@ -7,8 +7,6 @@ from webApp.common.models import Like
 from webApp.common.forms import CommentForm, SearchForm
 from django.db.models import Q
 from .tasks import send_email_to_users
-# from django.core.mail import send_mail, EmailMessage
-# from django.conf import settings
 
 
 class BaseView(LoginRequiredMixin):
@@ -75,7 +73,7 @@ class PostCreateView(LoginRequiredMixin, CreateView):
         response = super().form_valid(form)
 
         # send email using celery and redis
-        send_email_to_users.delay(form.instance.title, form.instance.content, self.request.user.username)
+        # send_email_to_users.delay(form.instance.title, form.instance.content, self.request.user.username)
 
         return response
 
