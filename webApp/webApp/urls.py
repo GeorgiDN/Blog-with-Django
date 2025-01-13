@@ -54,6 +54,7 @@ urlpatterns = [
     path('profile/<str:username>/', ProfileDetailView.as_view(), name='profile-view'),
     path('messaging/', include('webApp.messaging.urls')),
     path('friends/', include('webApp.friends.urls')),
+    path('block/', include('webApp.blocking.urls')),
 ]
 
 if settings.DEBUG:

@@ -8,7 +8,7 @@
                 <h5>Posts</h5>
                 <i class="fa-solid fa-signs-post"></i>
             </a>
-    
+
             <a class="text-info" href="{% url 'conversation-detail' profile.user.username %}">
                 <h5>Send message</h5>
                 <i class="fa-solid fa-envelope"></i>
@@ -18,7 +18,7 @@
                     <h5>Friends</h5>
                     <i class="fa-solid fa-user-group"></i>
                 </a>
-                
+
                 {% if not my_profile_page %}
                     <form method="post" action="{% url 'send-friend-request' profile.user.id %}">
                         {% csrf_token %}
@@ -37,6 +37,18 @@
                 {% endif %}
             </div>
         </div>
+        <form method="post" action="{% url 'block-user' profile.user.id %}">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger btn-sm mb-1">
+                BLOCK
+            </button>
+        </form>
+        <form method="post" action="{% url 'unblock-user' profile.user.id %}">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-info btn-sm mb-1">
+                UNBLOCK
+            </button>
+        </form>
         <p><strong>First Name:</strong> {{ profile.first_name }}</p>
         <p><strong>Last Name:</strong> {{ profile.last_name }}</p>
         <p><strong>Phone:</strong> {{ profile.phone }}</p>

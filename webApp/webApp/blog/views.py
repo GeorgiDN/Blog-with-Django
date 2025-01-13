@@ -7,6 +7,7 @@ from webApp.common.models import Like
 from webApp.common.forms import CommentForm, SearchForm
 from django.db.models import Q
 from .tasks import send_email_to_users
+from ..blocking.models import Block
 
 
 class BaseView(LoginRequiredMixin):
@@ -37,6 +38,21 @@ class BaseView(LoginRequiredMixin):
                 Q(content__icontains=search_term) |
                 Q(author__username__icontains=search_term)
             )
+
+        if self.request.user.is_authenticated:
+            blocked_users = Block.objects.filter(
+                Q(blocker=self.request.user) |
+                Q(blocked=self.request.user)
+            )
+
+            blocked_user_ids = set(
+                blocked_users.values_list('blocker__id', flat=True).union(
+                    blocked_users.values_list('blocked__id', flat=True)
+                )
+            )
+
+            blocked_user_ids.discard(self.request.user.id)
+            queryset = queryset.exclude(author__id__in=blocked_user_ids)
 
         return queryset
 
