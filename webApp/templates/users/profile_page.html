@@ -34,15 +34,17 @@
                             </button>
                         {% endif %}
                     </form>
+                    <form method="post" action="{% url 'block-user' profile.user.id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger btn-sm mb-1">
+                            Block user
+                        </button>
+                    </form>
                 {% endif %}
+
             </div>
         </div>
-        <form method="post" action="{% url 'block-user' profile.user.id %}">
-            {% csrf_token %}
-            <button type="submit" class="btn btn-danger btn-sm mb-1">
-                Block user
-            </button>
-        </form>
+
         <p><strong>First Name:</strong> {{ profile.first_name }}</p>
         <p><strong>Last Name:</strong> {{ profile.last_name }}</p>
         <p><strong>Phone:</strong> {{ profile.phone }}</p>

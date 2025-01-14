@@ -10,7 +10,7 @@
                         <img class="rounded-circle article-img profile-img"
                              src="{{ user.user_profile.image.url }}"
                              alt="{{ user.username }}'s profile picture">
-                        {{ user.blocked.username }}
+                        {{ user.username }}
                         
                         <form method="post" action="{% url 'unblock-user' user.id %}" style="display:inline;">
                             {% csrf_token %}

@@ -27,22 +27,19 @@
     text-decoration: underline;
 }
 
-.user-links .friends-section form button {
+.user-links .friends-section form .sent-request-btn {
     border: none;
     background-color: #fafafa;
     padding: 0;
     outline: none;
+    font-weight: 600;
+    font-size: 18px;
+    margin-bottom: 0.3rem;
 }
 
 .friends-section {
     display: flex;
     flex-direction: column;
-}
-
-.friends-section .sent-request-btn {
-    font-weight: 600;
-    font-size: 18px;
-    margin-bottom: 0.3rem;
 }
 
 .friends-section .sent-request-btn:hover {
