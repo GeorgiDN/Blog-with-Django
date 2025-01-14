@@ -41,15 +41,8 @@ class BaseView(LoginRequiredMixin):
             )
 
         if self.request.user.is_authenticated:
-            blocked_users = get_blocked_users(self.request.user)
 
-            blocked_user_ids = set(
-                blocked_users.values_list('blocker__id', flat=True).union(
-                    blocked_users.values_list('blocked__id', flat=True)
-                )
-            )
-
-            blocked_user_ids.discard(self.request.user.id)
+            blocked_user_ids = get_blocked_users(self.request.user)
             queryset = queryset.exclude(author__id__in=blocked_user_ids)
 
         return queryset

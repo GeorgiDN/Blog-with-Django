@@ -3,9 +3,9 @@
     <div class="blocked-users">
         <h1>Blocked users</h1>
 
-        {% if blocked_users %}
+        {% if my_blocked_users_list %}
             <ul>
-                {% for user in blocked_users %}
+                {% for user in my_blocked_users_list %}
                     <li class="list-group-item mb-2">
                         <img class="rounded-circle article-img profile-img"
                              src="{{ user.user_profile.image.url }}"

@@ -9,10 +9,19 @@ from webApp.blocking.models import Block
 
 
 def get_blocked_users(user):
-    return Block.objects.filter(
+    blocked_users = Block.objects.filter(
         Q(blocker=user) |
         Q(blocked=user)
     )
+
+    blocked_user_ids = set(
+        blocked_users.values_list('blocker__id', flat=True).union(
+            blocked_users.values_list('blocked__id', flat=True)
+        )
+    )
+
+    blocked_user_ids.discard(user.id)
+    return blocked_user_ids
 
 
 @login_required
@@ -23,7 +32,7 @@ def block_user(request, user_id):
         return HttpResponseBadRequest('You cannot block yourself!')
 
     Block.objects.get_or_create(blocker=request.user, blocked=target_user)
-    return redirect('blocked-users-list', user_id)
+    return redirect('blocked-users-list')
 
 
 @login_required
@@ -35,12 +44,12 @@ def unblock_user(request, user_id):
 
 @login_required
 def blocked_users_list(request):
-    blocked_users = User.objects.filter(
+    my_blocked_users_list = User.objects.filter(
         id__in=Block.objects.filter(blocker=request.user).values_list('blocked', flat=True)
     )
 
     context = {
-        'blocked_users': blocked_users
+        'my_blocked_users_list': my_blocked_users_list
     }
 
     return render(request, 'blocking/blocked_users_list.html', context)
