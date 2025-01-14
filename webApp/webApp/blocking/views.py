@@ -30,12 +30,14 @@ def block_user(request, user_id):
 def unblock_user(request, user_id):
     target_user = get_object_or_404(User, id=user_id)
     Block.objects.filter(blocker=request.user, blocked=target_user).delete()
-    return redirect('blocked-users-list', user_id)
+    return redirect('blocked-users-list')
 
 
 @login_required
-def blocked_users_list(request, user_id):
-    blocked_users = get_blocked_users(request.user)
+def blocked_users_list(request):
+    blocked_users = User.objects.filter(
+        id__in=Block.objects.filter(blocker=request.user).values_list('blocked', flat=True)
+    )
 
     context = {
         'blocked_users': blocked_users

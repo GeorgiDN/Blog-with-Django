@@ -6,13 +6,13 @@
         {% if blocked_users %}
             <ul>
                 {% for user in blocked_users %}
-                    <li class="list-group-item">
+                    <li class="list-group-item mb-2">
                         <img class="rounded-circle article-img profile-img"
-                             src="{{ user.blocked.user_profile.image.url }}"
-                             alt="{{ user.blocked.username }}'s profile picture">
+                             src="{{ user.user_profile.image.url }}"
+                             alt="{{ user.username }}'s profile picture">
                         {{ user.blocked.username }}
                         
-                        <form method="post" action="{% url 'unblock-user' user.blocked.id %}" style="display:inline;">
+                        <form method="post" action="{% url 'unblock-user' user.id %}" style="display:inline;">
                             {% csrf_token %}
                             <button type="submit" class="btn btn-info btn-sm mb-1 ml-2">
                                 UNBLOCK
