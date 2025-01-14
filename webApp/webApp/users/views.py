@@ -1,4 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.http import HttpResponseForbidden
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login
 from django.contrib import messages
@@ -6,6 +7,7 @@ from django.views.generic import CreateView, View, DeleteView, DetailView
 from django.contrib.auth.models import User
 from django.urls import reverse_lazy
 
+from webApp.blocking.views import get_blocked_users
 from webApp.friends.models import FriendRequest, Friendship
 from webApp.users.forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm
 from django.contrib.auth.decorators import login_required
@@ -103,6 +105,16 @@ class ProfileDetailView(LoginRequiredMixin, DetailView):
     def get_object(self, **kwargs):
         username = self.kwargs.get('username')
         return get_object_or_404(Profile, user__username=username)
+
+    def dispatch(self, request, *args, **kwargs):
+        current_user = request.user
+        username = self.kwargs.get('username')
+        to_user = get_object_or_404(User, username=username)
+
+        if current_user.id in get_blocked_users(to_user) or to_user.id in get_blocked_users(current_user):
+            return HttpResponseForbidden("You cannot view this profile.")
+
+        return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
