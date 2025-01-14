@@ -1,6 +1,9 @@
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils.timezone import now
+
+from webApp.blocking.views import get_blocked_users
 
 
 class Message(models.Model):
@@ -28,6 +31,11 @@ class Message(models.Model):
         null=True,
         blank=True
     )
+
+    def save(self, *args, **kwargs):
+        if self.sender.id in get_blocked_users(self.recipient) or self.recipient.id in get_blocked_users(self.sender):
+            raise ValidationError("You cannot send messages to this user.")
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return f"Message from {self.sender} to {self.recipient} at {self.timestamp}"

@@ -1,5 +1,6 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.models import User
+from django.http import HttpResponseForbidden
 from django.shortcuts import render, redirect
 from django.db.models import Q, Count
 from django.urls.base import reverse
@@ -7,6 +8,7 @@ from django.views.generic import UpdateView, DeleteView, ListView, DetailView
 
 from .forms import MessageEditForm
 from .models import Message
+from ..blocking.views import get_blocked_users
 
 
 class ConversationsListView(LoginRequiredMixin, ListView):
@@ -45,6 +47,9 @@ class ConversationDetailView(LoginRequiredMixin, DetailView):
 
         conversation_messages.filter(recipient=user, is_read=False).update(is_read=True)
 
+        is_blocked_user = user.id in get_blocked_users(recipient) or recipient.id in get_blocked_users(user)
+
+        context['is_blocked_user'] = is_blocked_user
         context['conversation_messages'] = conversation_messages
         context['last_message_id'] = conversation_messages.last().pk\
             if conversation_messages.exists() else None
@@ -55,6 +60,10 @@ class ConversationDetailView(LoginRequiredMixin, DetailView):
         recipient = self.get_object()
         content = request.POST.get('content')
         file = request.FILES.get('file')
+
+        is_blocked_user = user.id in get_blocked_users(recipient) or recipient.id in get_blocked_users(user)
+        if is_blocked_user:
+            return HttpResponseForbidden("You cannot send messages to this user.")
 
         if content or file:
             new_message = Message.objects.create(
