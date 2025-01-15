@@ -6,7 +6,7 @@
         {% if requests_received %}
             <ul>
                 {% for friend_request in requests_received %}
-                    <li>
+                    <li class="list-group-item mb-2">
                     <a class="text-dark" href="{% url 'profile-view' friend_request.from_user.username %}">
                         <img class="rounded-circle article-img profile-img" src="{{ friend_request.from_user.user_profile.image.url  }}"
                              alt="{{ friend_request.from_user.username }}'s profile picture">

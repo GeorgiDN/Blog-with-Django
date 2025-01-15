@@ -1,4 +1,5 @@
 {% extends 'blog/base.html' %}
+{% load static %}
 {% block content %}
     <div id="last-message-data" data-last-message-id="{{ last_message_id }}"></div>
     <h2 class="message-header">
@@ -44,21 +45,27 @@
                 </div>
             {% endif %}
         {% endfor %}
+        <div id="loading" style="display: none;">Loading...</div>
     </div>
 
     {% if not is_blocked_user %}
         <form class="sent-message-form" method="post" enctype="multipart/form-data">
             {% csrf_token %}
-            <textarea name="content" rows="1" cols="50" maxlength="1000" placeholder="Type your message here..."></textarea>
+            <textarea name="content" rows="1" cols="50" maxlength="1000"
+                      placeholder="Type your message here..."></textarea>
             <input type="file" name="file" id="fileInput" style="display: none;" onchange="updateFileName(this)">
             <label for="fileInput" class="custom-file-upload">
                 <i class="fa fa-upload"></i><span class="upload">Upload</span>
             </label>
-             <span id="fileName" class="text-muted"></span>
+            <span id="fileName" class="text-muted"></span>
             <button type="submit">Send</button>
         </form>
         <small class="char-count">0/1000</small>
     {% else %}
-         <p class="text-danger">You cannot send messages to this user as they have blocked you or you have blocked them.</p>
+        <p class="text-danger">You cannot send messages to this user as they have blocked you or you have blocked
+            them.</p>
     {% endif %}
+
+    <script src="{% static 'common/js/scrollToTheBottom.js' %}"></script>
+    
 {% endblock %}

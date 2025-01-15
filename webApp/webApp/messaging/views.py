@@ -1,7 +1,8 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.models import User
+from django.core.paginator import Paginator
 from django.db.models.functions.comparison import Coalesce
-from django.http import HttpResponseForbidden
+from django.http import HttpResponseForbidden, JsonResponse
 from django.shortcuts import render, redirect
 from django.db.models import Q, Count, Max, ExpressionWrapper, F, When, Case
 from django.urls.base import reverse
@@ -16,6 +17,7 @@ class ConversationsListView(LoginRequiredMixin, ListView):
     model = User
     template_name = 'messaging/conversations_list.html'
     context_object_name = 'conversations'
+    paginate_by = 5
 
     def get_queryset(self):
         user = self.request.user
@@ -53,12 +55,17 @@ class ConversationDetailView(LoginRequiredMixin, DetailView):
 
         conversation_messages.filter(recipient=user, is_read=False).update(is_read=True)
 
+        last_message = conversation_messages.last()
+        last_message_id = last_message.pk if last_message else None
+
         is_blocked_user = user.id in get_blocked_users(recipient) or recipient.id in get_blocked_users(user)
 
         context['is_blocked_user'] = is_blocked_user
         context['conversation_messages'] = conversation_messages
         context['last_message_id'] = conversation_messages.last().pk\
             if conversation_messages.exists() else None
+
+        self.last_message_id = last_message_id
 
         return context
 
