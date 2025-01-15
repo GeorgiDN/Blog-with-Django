@@ -1,8 +1,9 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.models import User
+from django.db.models.functions.comparison import Coalesce
 from django.http import HttpResponseForbidden
 from django.shortcuts import render, redirect
-from django.db.models import Q, Count
+from django.db.models import Q, Count, Max, ExpressionWrapper, F, When, Case
 from django.urls.base import reverse
 from django.views.generic import UpdateView, DeleteView, ListView, DetailView
 
@@ -18,14 +19,19 @@ class ConversationsListView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         user = self.request.user
-        return User.objects.prefetch_related('sent_messages', 'received_messages').filter(
+
+        return User.objects.filter(
             Q(sent_messages__recipient=user) | Q(received_messages__sender=user)
         ).distinct().annotate(
+            last_message_time=Coalesce(
+                Max('sent_messages__timestamp', filter=Q(sent_messages__recipient=user)),
+                Max('received_messages__timestamp', filter=Q(received_messages__sender=user))
+            ),
             unread_count=Count(
                 'sent_messages',
                 filter=Q(sent_messages__recipient=user, sent_messages__is_read=False)
             )
-        )
+        ).order_by('-last_message_time')
 
 
 class ConversationDetailView(LoginRequiredMixin, DetailView):
@@ -53,6 +59,7 @@ class ConversationDetailView(LoginRequiredMixin, DetailView):
         context['conversation_messages'] = conversation_messages
         context['last_message_id'] = conversation_messages.last().pk\
             if conversation_messages.exists() else None
+
         return context
 
     def post(self, request, *args, **kwargs):
