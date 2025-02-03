@@ -1,3 +1,5 @@
+import os
+from asgiref.sync import sync_to_async, async_to_sync
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.http import HttpResponseForbidden
 from django.shortcuts import render, redirect, get_object_or_404
@@ -6,13 +8,12 @@ from django.contrib import messages
 from django.views.generic import CreateView, View, DeleteView, DetailView
 from django.contrib.auth.models import User
 from django.urls import reverse_lazy
-
 from webApp.blocking.views import get_blocked_users
 from webApp.friends.models import FriendRequest, Friendship
 from webApp.users.forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm
 from django.contrib.auth.decorators import login_required
-
 from webApp.users.models import Profile
+from django.core.mail import send_mail
 
 
 class AppUserRegisterView(CreateView):
@@ -21,11 +22,25 @@ class AppUserRegisterView(CreateView):
     template_name = 'users/register.html'
     success_url = reverse_lazy('blog-home')
 
+    async def send_welcome_email(self, user_email, username):
+        await sync_to_async(send_mail)(
+            f'Welcome to our blog {username}!',
+            'Thank you for you registration!',
+            os.environ['EMAIL_HOST_USER'],
+            [user_email],
+            fail_silently=False,
+        )
+
     def form_valid(self, form):
         response = super().form_valid(form)
 
         login(self.request, self.object)
         messages.success(self.request, 'Your account has been created!')
+
+        email = self.object.email
+        username = self.object.username
+        async_to_sync(self.send_welcome_email)(email, username)
+
         return response
 
 
@@ -130,46 +145,3 @@ class ProfileDetailView(LoginRequiredMixin, DetailView):
         context['is_send_request'] = is_send_request
         context['my_profile_page'] = my_profile_page
         return context
-
-
-# FBV
-# def register(request):
-#     if request.method == 'POST':
-#         form = UserRegisterForm(request.POST)
-#         if form.is_valid():
-#             form.save()
-#             username = form.cleaned_data.get('username')
-#             messages.success(request, f'Your account has with username {username} been created!')
-#             return redirect('login')
-#     else:
-#         form = UserRegisterForm()
-#
-#     context = {
-#         'form': form
-#     }
-#
-#     return render(request, 'users/register.html', context)
-
-
-# @login_required
-# def profile(request):
-#     if request.method == 'POST':
-#         u_form = UserUpdateForm(request.POST, instance=request.user)
-#         p_form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user.user_profile)
-#
-#         if u_form.is_valid() and p_form.is_valid():
-#             u_form.save()
-#             p_form.save()
-#             messages.success(request, f'Your account has been updated!')
-#             return redirect('profile')
-#
-#     else:
-#         u_form = UserUpdateForm(instance=request.user)
-#         p_form = ProfileUpdateForm(instance=request.user.user_profile)
-#
-#     context = {
-#         'u_form': u_form,
-#         'p_form': p_form
-#     }
-#
-#     return render(request, 'users/profile.html', context)
