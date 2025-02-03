@@ -28,7 +28,7 @@
             <div class="collapse navbar-collapse" id="navbarToggle">
                 <div class="navbar-nav mr-auto">
                     <a class="nav-item nav-link" href="{% url 'blog-home' %}">Home</a>
-{#                    <a class="nav-item nav-link" href="{% url 'blog-about' %}">About</a>#}
+                    {#                    <a class="nav-item nav-link" href="{% url 'blog-about' %}">About</a>#}
                 </div>
                 <!-- Navbar Right Side -->
                 <div class="navbar-nav">
@@ -69,8 +69,11 @@
         </div>
         <div class="col-md-4">
             <div class="content-section">
-                <h3>Sidebar</h3>
-                <ul class="list-group">
+                <div class="sidebar-header">
+                    <h3>Sidebar</h3>
+                    <button class="sidebar-button">Hide</button>
+                </div>
+                <ul class="list-group sidebar-list">
                     <li class="list-group-item list-group-item-light">
                         <a class="text-dark" href="{% url 'profile' %}">My Profile</a>
                     </li>
@@ -121,6 +124,6 @@
 <script src="{% static 'messaging/js/scrollToLastMessage.js' %}"></script>
 <script src="{% static 'messaging/js/resizeTextArea.js' %}"></script>
 <script src="{% static 'messaging/js/updateFileUploadName.js' %}"></script>
-
+<script src="{% static 'common/js/toggleSidebar.js' %}"></script>
 </body>
 </html>

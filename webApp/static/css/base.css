@@ -51,3 +51,28 @@ ul {
     margin-left: 0;
     list-style-type: none;
 }
+
+.sidebar-header {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.sidebar-button {
+    outline: none;
+    background-color: #4ac1f7;
+    border: 1px solid #4ac1f7;
+    border-radius: 5px;
+}
+
+.sidebar-button:hover{
+    cursor: pointer;
+    background-color: #0dacf1;
+}
+
+.sidebar-button:focus,
+.sidebar-button:active {
+    outline: none;
+    box-shadow: none;
+}
+
