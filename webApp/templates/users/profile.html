@@ -10,6 +10,11 @@
             </div>
         </div>
     </div>
+    <div class="user-links">
+        <a class="text-info" href="{% url 'user-posts' user.user_profile.user.username %}">
+            <h5>My Posts</h5>
+        </a>
+    </div>
     <div class="friends-section">
         <h5>
             <a class="text-info" href="{% url 'friend-list-user' user.id %}">My friends</a>
@@ -33,10 +38,10 @@
             <legend class="border-bottom mb-4">Profile Info</legend>
             {{ u_form|crispy }}
             {{ p_form|crispy }}
-             {% if request.user.user_profile.image.url != 'default.jpg' %}
-                 <a href="{% url 'confirm_remove_image' %}" class="btn btn-danger btn-sm">Remove Image</a>
+            {% if request.user.user_profile.image.url != 'default.jpg' %}
+                <a href="{% url 'confirm_remove_image' %}" class="btn btn-danger btn-sm">Remove Image</a>
             {% endif %}
-            
+
         </fieldset>
         <div class="form-group">
             <button class="btn btn-outline-info" type="submit">Update</button>
