@@ -28,7 +28,6 @@
             <div class="collapse navbar-collapse" id="navbarToggle">
                 <div class="navbar-nav mr-auto">
                     <a class="nav-item nav-link" href="{% url 'blog-home' %}">Home</a>
-                    {#                    <a class="nav-item nav-link" href="{% url 'blog-about' %}">About</a>#}
                 </div>
                 <!-- Navbar Right Side -->
                 <div class="navbar-nav">
@@ -73,37 +72,39 @@
                     <h3>Sidebar</h3>
                     <button class="sidebar-button">Hide</button>
                 </div>
-                <ul class="list-group sidebar-list">
-                    <li class="list-group-item list-group-item-light">
-                        <a class="text-dark" href="{% url 'profile' %}">My Profile</a>
-                    </li>
-                    <li class="list-group-item list-group-item-light">
-                        <a class="text-dark" href="{% url 'post-create' %}">Create Post</a>
-                    </li>
-                    <li class="list-group-item list-group-item-light">
-                        <a class="text-dark" href="{% url 'user-posts' request.user.username %}">My Posts</a>
-                    </li>
-                    <li class="list-group-item list-group-item-light">
-                        <a class="text-dark" href="{% url 'friend-list-user' request.user.id %}">My Friends </a>
-                    </li>
-                    <li class="list-group-item list-group-item-light">
-                        <a class="text-dark" href="{% url 'conversations-list' %}">
-                            Messages
-                            {% if unread_messages_count > 0 %}
-                                <span class="badge badge-danger">{{ unread_messages_count }}</span>
+                {% if request.user.is_authenticated %}
+                    <ul class="list-group sidebar-list">
+                        <li class="list-group-item list-group-item-light">
+                            <a class="text-dark" href="{% url 'profile' %}">My Profile</a>
+                        </li>
+                        <li class="list-group-item list-group-item-light">
+                            <a class="text-dark" href="{% url 'post-create' %}">Create Post</a>
+                        </li>
+                        <li class="list-group-item list-group-item-light">
+                            <a class="text-dark" href="{% url 'user-posts' request.user.username %}">My Posts</a>
+                        </li>
+                        <li class="list-group-item list-group-item-light">
+                            <a class="text-dark" href="{% url 'friend-list-user' request.user.id %}">My Friends </a>
+                        </li>
+                        <li class="list-group-item list-group-item-light">
+                            <a class="text-dark" href="{% url 'conversations-list' %}">
+                                Messages
+                                {% if unread_messages_count > 0 %}
+                                    <span class="badge badge-danger">{{ unread_messages_count }}</span>
+                                {% endif %}
+                            </a>
+                        </li>
+                        <li class="list-group-item list-group-item-light">
+                            <a class="text-dark" href="{% url 'friend-requests' %}">Friend's Requests</a>
+                            {% if requests_count > 0 %}
+                                <span class="badge badge-danger">{{ requests_count }}</span>
                             {% endif %}
-                        </a>
-                    </li>
-                    <li class="list-group-item list-group-item-light">
-                        <a class="text-dark" href="{% url 'friend-requests' %}">Friend's Requests</a>
-                        {% if requests_count > 0 %}
-                            <span class="badge badge-danger">{{ requests_count }}</span>
-                        {% endif %}
-                    </li>
-                    <li class="list-group-item list-group-item-light">
-                        <a class="text-dark" href="{% url 'blocked-users-list' %}">Blocked Users</a>
-                    </li>
-                </ul>
+                        </li>
+                        <li class="list-group-item list-group-item-light">
+                            <a class="text-dark" href="{% url 'blocked-users-list' %}">Blocked Users</a>
+                        </li>
+                    </ul>
+                {% endif %}
             </div>
         </div>
     </div>
