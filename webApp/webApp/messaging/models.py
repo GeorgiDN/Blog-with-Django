@@ -4,6 +4,7 @@ from django.utils.timezone import now
 from webApp.blocking.views import get_blocked_users
 from django.contrib.auth import get_user_model
 User = get_user_model()
+from datetime import datetime
 
 
 class Message(models.Model):
@@ -38,4 +39,4 @@ class Message(models.Model):
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return f"Message from {self.sender} to {self.recipient} at {self.timestamp}"
+        return f"Message from {self.sender} to {self.recipient} at {self.timestamp.strftime("%Y-%m-%d %H:%M:%S")}"

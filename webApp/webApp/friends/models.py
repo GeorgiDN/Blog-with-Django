@@ -22,7 +22,7 @@ class FriendRequest(models.Model):
         unique_together = ('from_user', 'to_user')
 
     def __str__(self):
-        return f'{self.from_user} -> {self.to_user}'
+        return f'From  {self.from_user} to  {self.to_user}'
 
 
 class Friendship(models.Model):
@@ -37,3 +37,6 @@ class Friendship(models.Model):
         blank=True,
         null=True,
     )
+
+    def __str__(self):
+        return f"{self.user.username}'s friends"
