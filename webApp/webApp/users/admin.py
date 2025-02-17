@@ -1,5 +1,11 @@
 from django.contrib import admin
-from webApp.users.models import Profile
+from webApp.users.models import Profile, CustomUser
+from django.contrib.auth.admin import UserAdmin
+
+
+@admin.register(CustomUser)
+class CustomUserAdmin(UserAdmin):
+    pass
 
 
 @admin.register(Profile)

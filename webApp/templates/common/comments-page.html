@@ -17,7 +17,7 @@
 
         {% for comment in post.post_comments.all %}
             <div id="comment-{{ comment.pk }}" class="comment">
-                <a class="user-link" href="{% url 'user-posts' comment.user.username %}">
+                <a class="user-link" href="{% url 'profile-view' comment.user.username %}">
                     <img src="{{ comment.user.user_profile.image.url }}"
                          class="img-thumbnail rounded-circle comment-img"
                          alt="profile-img">

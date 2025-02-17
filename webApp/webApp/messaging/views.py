@@ -1,16 +1,15 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.contrib.auth.models import User
-from django.core.paginator import Paginator
 from django.db.models.functions.comparison import Coalesce
 from django.http import HttpResponseForbidden, JsonResponse
 from django.shortcuts import render, redirect
 from django.db.models import Q, Count, Max, ExpressionWrapper, F, When, Case
 from django.urls.base import reverse
 from django.views.generic import UpdateView, DeleteView, ListView, DetailView
-
 from .forms import MessageEditForm
 from .models import Message
 from ..blocking.views import get_blocked_users
+from django.contrib.auth import get_user_model
+User = get_user_model()
 
 
 class ConversationsListView(LoginRequiredMixin, ListView):
@@ -104,10 +103,11 @@ class MessageEditView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     template_name = 'messaging/edit_message.html'
 
     def get_success_url(self):
-        return (reverse(
-            'conversation-detail',
-            args=[self.object.recipient.username])
-                + f"#message-{self.object.pk}")
+        # return (reverse(
+        #     'conversation-detail',
+        #     args=[self.object.recipient.username])
+        #         + f"#message-{self.object.pk}")
+        return reverse('conversation-detail', kwargs={'username': self.object.recipient.username})
 
     def test_func(self):
         curr_message = self.get_object()

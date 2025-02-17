@@ -1,7 +1,6 @@
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, TemplateView
-from django.contrib.auth.models import User
 from webApp.blog.models import Post
 from webApp.common.models import Like
 from webApp.common.forms import CommentForm, SearchForm
@@ -9,6 +8,8 @@ from django.db.models import Q
 from .tasks import send_email_to_users
 from ..blocking.models import Block
 from ..blocking.views import get_blocked_users
+from django.contrib.auth import get_user_model
+User = get_user_model()
 
 
 class BaseView(LoginRequiredMixin):

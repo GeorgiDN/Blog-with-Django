@@ -1,13 +1,20 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
 from PIL import Image
-
+from django.conf import settings
 from webApp.users.validators import PhoneValidator
+
+
+class CustomUser(AbstractUser):
+    pass
+
+    def __str__(self):
+        return self.username
 
 
 class Profile(models.Model):
     user = models.OneToOneField(
-        to=User,
+        to=settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         related_name='user_profile'
     )
@@ -24,6 +31,11 @@ class Profile(models.Model):
         max_length=50,
         null=True,
         blank=True
+    )
+    email_address = models.EmailField(
+        null=True,
+        blank=True,
+        help_text='Here you can share your email'
     )
     phone = models.CharField(
         max_length=15,

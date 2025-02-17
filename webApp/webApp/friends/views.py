@@ -8,7 +8,8 @@ from django.views import View
 from django.views.generic import ListView, DeleteView
 from django.urls import reverse_lazy
 from .models import Friendship, FriendRequest
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
+User = get_user_model()
 
 
 class SendFriendRequestView(LoginRequiredMixin, View):

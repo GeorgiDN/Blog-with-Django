@@ -5,15 +5,15 @@ from django.http import HttpResponseForbidden
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login
 from django.contrib import messages
-from django.views.generic import CreateView, View, DeleteView, DetailView
-from django.contrib.auth.models import User
+from django.views.generic import CreateView, View, DetailView
 from django.urls import reverse_lazy
 from webApp.blocking.views import get_blocked_users
 from webApp.friends.models import FriendRequest, Friendship
 from webApp.users.forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm
-from django.contrib.auth.decorators import login_required
 from webApp.users.models import Profile
 from django.core.mail import send_mail
+from django.contrib.auth import get_user_model
+User = get_user_model()
 
 
 class AppUserRegisterView(CreateView):
