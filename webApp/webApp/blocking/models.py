@@ -20,3 +20,6 @@ class Block(models.Model):
 
     class Meta:
         unique_together = ('blocker', 'blocked')
+
+    def __str__(self):
+        return f'User {self.blocker} block User {self.blocked}'

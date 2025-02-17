@@ -5,4 +5,5 @@ from webApp.blocking.models import Block
 
 @admin.register(Block)
 class BlockAdmin(admin.ModelAdmin):
-    pass
+    list_display = ('blocker', 'blocked', 'created_at')
+    list_filter = ('blocker', 'blocked', 'created_at')
