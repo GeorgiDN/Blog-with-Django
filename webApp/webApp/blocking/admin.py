@@ -1,3 +1,8 @@
 from django.contrib import admin
 
-# Register your models here.
+from webApp.blocking.models import Block
+
+
+@admin.register(Block)
+class BlockAdmin(admin.ModelAdmin):
+    pass
