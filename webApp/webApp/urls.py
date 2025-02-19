@@ -52,6 +52,7 @@ urlpatterns = [
     path('common/', include('webApp.common.urls')),
     path('profile/remove-image/', user_views.ConfirmRemoveImageView.as_view(), name='confirm_remove_image'),
     path('profile/<str:username>/', ProfileDetailView.as_view(), name='profile-view'),
+    path('users-list/', user_views.UsersListView.as_view(), name='users-list'),
     path('messaging/', include('webApp.messaging.urls')),
     path('friends/', include('webApp.friends.urls')),
     path('block/', include('webApp.blocking.urls')),

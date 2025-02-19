@@ -5,7 +5,7 @@ from django.http import HttpResponseForbidden
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login
 from django.contrib import messages
-from django.views.generic import CreateView, View, DetailView
+from django.views.generic import CreateView, View, DetailView, ListView
 from django.urls import reverse_lazy
 from webApp.blocking.views import get_blocked_users
 from webApp.friends.models import FriendRequest, Friendship
@@ -145,3 +145,13 @@ class ProfileDetailView(LoginRequiredMixin, DetailView):
         context['is_send_request'] = is_send_request
         context['my_profile_page'] = my_profile_page
         return context
+
+
+class UsersListView(LoginRequiredMixin, ListView):
+    template_name = 'users/users_list.html'
+    context_object_name = 'users'
+
+    def get_queryset(self):
+        blocked_ids = get_blocked_users(self.request.user)
+        users = User.objects.exclude(id__in=blocked_ids).order_by('username')
+        return users

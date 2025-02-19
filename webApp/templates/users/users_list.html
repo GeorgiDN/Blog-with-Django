@@ -1,0 +1,16 @@
+{% extends 'blog/base.html' %}
+{% block content %}
+    {% if users %}
+        <ul>
+            {% for user in users %}
+                <li class="list-group-item">
+                    <a class="text-dark" href="{% url 'profile-view' user.username %}">
+                        <img class="rounded-circle article-img profile-img" src="{{ user.user_profile.image.url }}"
+                             alt="{{ user.username }}'s profile picture">
+                        {{ user.username }}
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endblock %}
