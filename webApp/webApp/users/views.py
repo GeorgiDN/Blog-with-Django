@@ -150,6 +150,7 @@ class ProfileDetailView(LoginRequiredMixin, DetailView):
 class UsersListView(LoginRequiredMixin, ListView):
     template_name = 'users/users_list.html'
     context_object_name = 'users'
+    paginate_by = 10
 
     def get_queryset(self):
         blocked_ids = get_blocked_users(self.request.user)
