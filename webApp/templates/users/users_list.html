@@ -1,5 +1,13 @@
 {% extends 'blog/base.html' %}
 {% block content %}
+    <div class="user-search-form">
+        <form class="searchbar" method="GET">
+            <input class="user-search-input" type="text" name="q" placeholder="Search for user" value="{{ search_query }}">
+                <button class="search-btn">
+                <i class="fa-solid fa-magnifying-glass"></i>
+            </button>
+        </form>
+    </div>
     {% if users %}
         <ul class="mb-5">
             {% for user in users %}

@@ -32,7 +32,7 @@ class SearchForm(forms.Form):
     search_term = forms.CharField(
         required=False,
         widget=forms.TextInput(
-            attrs={'placeholder': 'Search',
+            attrs={'placeholder': 'Search for Post',
                    'class': 'form-control'}
         )
     )

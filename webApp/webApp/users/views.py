@@ -1,6 +1,7 @@
 import os
 from asgiref.sync import sync_to_async, async_to_sync
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.db.models import Q
 from django.http import HttpResponseForbidden
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login
@@ -154,5 +155,18 @@ class UsersListView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         blocked_ids = get_blocked_users(self.request.user)
-        users = User.objects.exclude(id__in=blocked_ids).order_by('username')
-        return users
+        queryset = User.objects.exclude(id__in=blocked_ids).order_by('username')
+
+        search_query = self.request.GET.get('q', '').strip()
+        if search_query:
+            queryset = queryset.filter(
+                Q(username__icontains=search_query) |
+                Q(first_name__icontains=search_query) |
+                Q(last_name__icontains=search_query)
+            )
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['search_query'] = self.request.GET.get('q', '')
+        return context

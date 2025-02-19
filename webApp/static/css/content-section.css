@@ -61,6 +61,26 @@ a.article-title:hover {
     overflow-wrap: break-word;
 }
 
+.user-search-form {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.user-search-form form .user-search-input {
+    padding: 0.3rem;
+    position: relative;
+    margin-bottom: 1.6rem;
+    border: 1px solid #ccc;
+    border-radius: 0.6rem;
+}
+
+.user-search-form form button {
+    position: absolute;
+    top: 5px;
+}
+
 @media (min-width: 1300px) and (max-width: 2600px) {
 
     .media-body {
