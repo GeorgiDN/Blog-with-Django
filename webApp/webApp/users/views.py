@@ -123,12 +123,13 @@ class ProfileDetailView(LoginRequiredMixin, DetailView):
         return get_object_or_404(Profile, user__username=username)
 
     def dispatch(self, request, *args, **kwargs):
-        current_user = request.user
         username = self.kwargs.get('username')
         to_user = get_object_or_404(User, username=username)
 
-        if current_user.id in get_blocked_users(to_user) or to_user.id in get_blocked_users(current_user):
-            return HttpResponseForbidden("You cannot view this profile.")
+        if request.user.is_authenticated:
+            current_user = request.user
+            if current_user.id in get_blocked_users(to_user) or to_user.id in get_blocked_users(current_user):
+                return HttpResponseForbidden("You cannot view this profile.")
 
         return super().dispatch(request, *args, **kwargs)
 
