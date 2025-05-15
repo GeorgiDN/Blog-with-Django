@@ -1,4 +1,4 @@
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, render
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, TemplateView
 from webApp.blog.models import Post
@@ -12,7 +12,11 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 
 
-class BaseView(LoginRequiredMixin):
+def about(request):
+    return render(request, 'blog/about.html')
+
+
+class BaseView:
     def get_user_liked_posts(self):
         if self.request.user.is_authenticated:
             return Like.objects.filter(user=self.request.user).values_list('to_post_id', flat=True)
@@ -57,7 +61,7 @@ class PostListView(BaseView, ListView):
     paginate_by = 5
 
 
-class UserPostListView(BaseView, ListView):
+class UserPostListView(LoginRequiredMixin, BaseView, ListView):
     model = Post
     template_name = 'blog/user_posts.html'
     context_object_name = 'posts'
@@ -68,7 +72,7 @@ class UserPostListView(BaseView, ListView):
         return Post.objects.filter(author=user).order_by('-date_posted')
 
 
-class PostDetailView(BaseView, DetailView):
+class PostDetailView(LoginRequiredMixin, BaseView, DetailView):
     model = Post
 
 
