@@ -10,7 +10,7 @@ from django.views.generic import CreateView, View, DetailView, ListView
 from django.urls import reverse_lazy
 from webApp.blocking.views import get_blocked_users
 from webApp.friends.models import FriendRequest, Friendship
-from webApp.users.forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm
+from webApp.users.forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm, ChangePasswordForm
 from webApp.users.models import Profile
 from django.core.mail import send_mail
 from django.contrib.auth import get_user_model
@@ -171,3 +171,30 @@ class UsersListView(LoginRequiredMixin, ListView):
         context = super().get_context_data(**kwargs)
         context['search_query'] = self.request.GET.get('q', '')
         return context
+
+
+def update_password(request):
+    if request.user.is_authenticated:
+        current_user = request.user
+        if request.method == 'POST':
+            form = ChangePasswordForm(current_user, request.POST)
+            if form.is_valid():
+                form.save()
+                messages.success(request, 'Your password has been changed!')
+                return redirect('login')
+            else:
+                for error in list(form.errors.values()):
+                    messages.error(request, error)
+                    return redirect('update-password')
+        else:
+            form = ChangePasswordForm(current_user)
+
+    else:
+        messages.error(request, 'You are not logged in!')
+        return redirect('login')
+
+    context = {
+        'form': form,
+    }
+
+    return render(request, 'users/update_password.html', context)
