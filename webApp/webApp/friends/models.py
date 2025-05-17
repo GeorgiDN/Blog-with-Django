@@ -35,7 +35,6 @@ class Friendship(models.Model):
         User,
         related_name='friend_of',
         blank=True,
-        null=True,
     )
 
     def __str__(self):
