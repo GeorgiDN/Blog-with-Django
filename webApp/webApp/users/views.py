@@ -101,6 +101,7 @@ class ProfileDeleteView(LoginRequiredMixin, UserPassesTestMixin, View):
         return redirect(self.success_url)
 
 
+
 class ConfirmRemoveImageView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         return render(request, 'users/confirm_remove_image.html')
