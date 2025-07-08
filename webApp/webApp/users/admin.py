@@ -13,7 +13,7 @@ class ProfileAdmin(admin.ModelAdmin):
     list_display = ('user', 'first_name', 'last_name')
     list_filter = ('user', 'first_name', 'last_name', 'country', 'city')
     search_fields = ('user__username', 'first_name', 'last_name', 'country', 'city')
-
+    list_per_page = 10
     fieldsets = (
         ('User Profile', {
             'fields': ('user', 'image')
