@@ -71,7 +71,9 @@
             <div class="content-section">
                 <div class="sidebar-header">
                     <h3>Sidebar</h3>
+                    {% if request.user.is_authenticated %}
                     <button class="sidebar-button">Hide</button>
+                    {% endif %}
                 </div>
                 {% if request.user.is_authenticated %}
                     <ul class="list-group sidebar-list">

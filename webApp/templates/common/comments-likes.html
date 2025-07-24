@@ -13,7 +13,7 @@
 <div id="likes-{{ comment.pk }}" class="ml-5" style="display: none">
 {% for like in comment.comment_likes.all %}
     <div class="user-like">
-        <a href="{% url 'profile-view' comment.user.username %}">{{ like.user.username }}</a>
+        <a href="{% url 'profile-view' like.user.username %}">{{ like.user.username }}</a>
     </div>
 {% endfor %}
 </div>
