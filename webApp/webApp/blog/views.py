@@ -8,6 +8,7 @@ from django.db.models import Q
 from .tasks import send_email_to_users
 from ..blocking.models import Block
 from ..blocking.views import get_blocked_users
+from django.core.files.storage import default_storage
 from django.contrib.auth import get_user_model
 User = get_user_model()
 
@@ -93,6 +94,14 @@ class PostCreateView(LoginRequiredMixin, CreateView):
 class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Post
     fields = ['title', 'content', 'image']
+
+    def get_object(self, queryset=None):
+        post = super().get_object(queryset)
+        if post.image and not default_storage.exists(post.image.name):
+            # Clear the broken image reference if the file is missing
+            post.image = None
+            post.save(update_fields=['image'])
+        return post
 
     def form_valid(self, form):
         form.instance.author = self.request.user
