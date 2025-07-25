@@ -79,6 +79,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'webApp.common.context_processors.search_form',
                 'webApp.messaging.context_processors.unread_messages_count',
+                'webApp.friends.context_processors.requests_count',
             ],
         },
     },

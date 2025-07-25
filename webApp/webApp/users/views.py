@@ -51,12 +51,12 @@ class ProfileView(LoginRequiredMixin, View):
         u_form = UserUpdateForm(instance=request.user)
         p_form = ProfileUpdateForm(instance=request.user.user_profile)
 
-        requests_count = FriendRequest.objects.filter(to_user=self.request.user).count()
+        # requests_count = FriendRequest.objects.filter(to_user=self.request.user).count()
 
         context = {
             'u_form': u_form,
             'p_form': p_form,
-            'requests_count': requests_count,
+            # 'requests_count': requests_count,
         }
 
         return render(request, 'users/profile.html', context)
