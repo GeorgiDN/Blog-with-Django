@@ -92,3 +92,6 @@ The application also includes features such as password reset via email, sending
 
 ### Blocked
 - Users can block another users.
+
+### Database dump command for quick project setup
+pg_restore -U postgres -h 127.0.0.1 -p 5432 -d databaseexport -v backup.sql
