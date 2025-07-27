@@ -85,7 +85,7 @@ class PostCreateView(LoginRequiredMixin, CreateView):
         form.instance.author = self.request.user
         response = super().form_valid(form)
 
-        # send email using celery and redis
+        # just for test - send email using celery and redis
         # send_email_to_users.delay(form.instance.title, form.instance.content, self.request.user.username)
 
         return response
