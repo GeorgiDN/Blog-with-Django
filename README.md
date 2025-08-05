@@ -76,9 +76,11 @@ The application also includes features such as password reset via email, sending
 ### User Profiles
 - Profile pictures for users.
 - View user-specific content.
+- Automated email sending via Django's `send_mail` with async support when user register
 
 ### Authentication
 - User registration, login and logout.
+- Password update.
 - Password reset functionality with email.
 
 ### Friends
@@ -93,5 +95,11 @@ The application also includes features such as password reset via email, sending
 ### Blocked
 - Users can block another users.
 
-### Database dump command for quick project setup
-pg_restore -U postgres -h 127.0.0.1 -p 5432 -d databaseexport -v backup.sql
+### Unittest
+- Posts - create, update, delete, list views.
+- Fiends - friend request: accept, reject duplicate; friend list view, remove friend.
+- Users - register and redirect, profile post update, delete profile (own and other).
+
+### Fill database options for quick project setup
+- Database dump command for quick project setup: `pg_restore -U postgres -h 127.0.0.1 -p 5432 -d databaseexport -v backup.sql`
+- Python file 'fill_database_with_data.py' (for create users, posts and messages)
